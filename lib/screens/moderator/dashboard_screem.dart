@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
-import 'package:tagconnectweb/widgets/moderator/linegraph.dart';
+import 'package:tagconnectweb/widgets/moderator/barGraph_widget.dart';
+import 'package:tagconnectweb/widgets/moderator/lineGraph_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -14,140 +15,145 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: tcWhite,
       body: SafeArea(
         child: Container(
           child: Row(
             children: [
-              SingleChildScrollView(
+              Expanded(
+                flex: 4,
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(
                     children: [
                       Container(
-                        child: Column(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Dashboard',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontFamily: 'PublicSans',
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w900,
+                            color: tcDark,
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.transparent,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Statistics',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontFamily: 'PublicSans',
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            color: tcBlack,
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.transparent,
+                      ),
+                      Container(
+                        height: 450,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Dashboard'),
-                            Container(
-                              width: 480,
-                              height: 300,
-                              child: Wrap(
-                                spacing: 10.0,
-                                runSpacing: 10.0,
-                                children: [
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Card 1',
-                                              style: TextStyle(fontSize: 24.0)),
-                                          const SizedBox(height: 8.0),
-                                          Text('Description for Card 1',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
-                                      ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    top: 20, right: 20, bottom: 5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 7,
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
                                     ),
-                                  ),
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Card 2',
-                                              style: TextStyle(fontSize: 24.0)),
-                                          const SizedBox(height: 8.0),
-                                          Text('Description for Card 2',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Card 3',
-                                              style: TextStyle(fontSize: 24.0)),
-                                          const SizedBox(height: 8.0),
-                                          Text('Description for Card 3',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Card 4',
-                                              style: TextStyle(fontSize: 24.0)),
-                                          const SizedBox(height: 8.0),
-                                          Text('Description for Card 4',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                                child: LineGraphWidget(),
                               ),
                             ),
-                            Container(
-                              width: 700,
-                              height: 700,
-                              child: LineGraph(),
+                            VerticalDivider(
+                              color: Colors.transparent,
                             ),
-                            Container(
-                              width: 700,
-                              height: 700,
-                              child: DataTable(
-                                columns: [
-                                  DataColumn(
-                                    label: Text('ID'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Barabgay ID'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('User ID'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Location'),
-                                  ),
-                                ],
-                                rows: [
-                                  DataRow(cells: [
-                                    DataCell(
-                                      Text('112'),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    top: 20, right: 20, bottom: 5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 7,
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
                                     ),
-                                    DataCell(
-                                      Text('11212'),
-                                    ),
-                                    DataCell(
-                                      Text('11212'),
-                                    ),
-                                    DataCell(
-                                      Text('11212'),
-                                    ),
-                                  ]),
-                                ],
+                                  ],
+                                ),
+                                child: BarGraphWidget(),
                               ),
                             ),
                           ],
                         ),
                       ),
+                      Divider(
+                        color: Colors.transparent,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Users Data',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontFamily: 'PublicSans',
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            color: tcBlack,
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.transparent,
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 250,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 3,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+              ),
+              VerticalDivider(),
+              Expanded(
+                child: Container(),
               ),
             ],
           ),
