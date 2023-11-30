@@ -59,7 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: Colors.transparent,
                       ),
                       Container(
-                        height: 450,
+                        height: 400,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -143,6 +143,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 offset:
                                     Offset(0, 3), // changes position of shadow
                               ),
+                            ],
+                          ),
+                          child: DataTable(
+                            columns: [
+                              DataColumn(label: Text('ID')),
+                              DataColumn(label: Text('Name')),
+                              DataColumn(label: Text('Age')),
+                            ],
+                            rows: [
+                              DataRow(cells: [
+                                DataCell(Text('1')),
+                                DataCell(Text('John')),
+                                DataCell(Text('25')),
+                              ]),
+                              DataRow(cells: [
+                                DataCell(Text('2')),
+                                DataCell(Text('Alice')),
+                                DataCell(Text('30')),
+                              ]),
+                              DataRow(cells: [
+                                DataCell(Text('3')),
+                                DataCell(Text('Bob')),
+                                DataCell(Text('22')),
+                              ]),
                             ],
                           ),
                         ),
