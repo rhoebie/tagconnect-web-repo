@@ -149,15 +149,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
               ),
-              Container(
-                width: 400,
-                height: 400,
-                child: TableCalendar(
-                  firstDay: DateTime.utc(2010, 01, 01),
-                  lastDay: DateTime.utc(2030, 01, 01),
-                  focusedDay: DateTime.now(),
-                ),
-              ),
             ],
           ),
         ),
