@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: tcWhite,
       body: SafeArea(
         child: Container(
           child: Row(
@@ -112,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              VerticalDivider(),
               Expanded(
                 flex: 7,
                 child: PageView(

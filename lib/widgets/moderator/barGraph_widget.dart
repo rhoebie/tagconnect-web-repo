@@ -10,23 +10,27 @@ class BarGraphWidget extends StatefulWidget {
 }
 
 class _BarGraphWidgetState extends State<BarGraphWidget> {
-  double barWidth = 15.0;
+  double barWidth = 12.0;
   @override
   Widget build(BuildContext context) {
     return BarChart(
       BarChartData(
         barGroups: [
           BarChartGroupData(x: 0, barRods: [
-            BarChartRodData(toY: 7, color: tcOrange, width: barWidth)
+            BarChartRodData(toY: 7, color: tcViolet, width: barWidth),
+            BarChartRodData(toY: 4, color: tcGray, width: barWidth),
           ]),
           BarChartGroupData(x: 1, barRods: [
-            BarChartRodData(toY: 4, color: tcGreen, width: barWidth)
+            BarChartRodData(toY: 8, color: tcViolet, width: barWidth),
+            BarChartRodData(toY: 15, color: tcGray, width: barWidth),
           ]),
           BarChartGroupData(x: 2, barRods: [
-            BarChartRodData(toY: 10, color: tcRed, width: barWidth)
+            BarChartRodData(toY: 10, color: tcViolet, width: barWidth),
+            BarChartRodData(toY: 8, color: tcGray, width: barWidth),
           ]),
           BarChartGroupData(x: 3, barRods: [
-            BarChartRodData(toY: 2, color: tcBlue, width: barWidth)
+            BarChartRodData(toY: 2, color: tcViolet, width: barWidth),
+            BarChartRodData(toY: 1, color: tcGray, width: barWidth),
           ]),
         ],
         barTouchData: BarTouchData(
@@ -36,9 +40,22 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
           ),
         ),
         borderData: FlBorderData(show: false),
+        gridData: const FlGridData(show: true, drawVerticalLine: false),
         titlesData: FlTitlesData(
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
+          ),
           topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -58,11 +75,6 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
                     return const Text('');
                 }
               },
-            ),
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
             ),
           ),
         ),
