@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello, Rhoebie Jayriz C',
+                      'Hello, Rhoebie Jayriz C. Labrador',
                       style: TextStyle(
                         color: tcBlack,
                         fontFamily: 'Roboto',
@@ -70,11 +70,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     Text(
-                      'Hello',
+                      'How are you doing today?',
                       style: TextStyle(
                         color: tcBlack,
                         fontFamily: 'Roboto',
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -134,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Column(
                       children: [
                         Expanded(

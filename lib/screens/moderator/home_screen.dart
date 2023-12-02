@@ -40,26 +40,53 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.only(top: 30),
                   child: Column(
                     children: [
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: TextStyle(
-                            fontFamily: 'PublicSans',
-                            fontSize: 26.sp,
-                            fontWeight: FontWeight.w900,
-                            color: tcViolet,
-                          ),
+                      Container(
+                        width: double.infinity,
+                        height: 200,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            TextSpan(
-                              text: 'TAG',
-                            ),
-                            TextSpan(
-                              text: 'CONNECT',
+                            Text(
+                              'Upper Bicutan',
                               style: TextStyle(
-                                color: tcRed,
+                                color: tcBlack,
+                                fontFamily: 'PublicSans',
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'PublicSans',
+                                  fontSize: 26.sp,
+                                  fontWeight: FontWeight.w900,
+                                  color: tcViolet,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'TAG',
+                                  ),
+                                  TextSpan(
+                                    text: 'CONNECT',
+                                    style: TextStyle(
+                                      color: tcRed,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              'Moderator',
+                              style: TextStyle(
+                                color: tcBlack,
+                                fontFamily: 'PublicSans',
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -69,6 +96,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.transparent,
                       ),
                       ListTile(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            bottomLeft: Radius.circular(30),
+                          ),
+                        ),
+                        tileColor: _currentIndex != 0 ? tcWhite : tcAsh,
                         onTap: () {
                           _onItemTapped(0);
                         },
@@ -89,6 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         titleAlignment: ListTileTitleAlignment.center,
                       ),
                       ListTile(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            bottomLeft: Radius.circular(30),
+                          ),
+                        ),
+                        tileColor: _currentIndex != 1 ? tcWhite : tcAsh,
                         onTap: () {
                           _onItemTapped(1);
                         },
@@ -107,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         titleAlignment: ListTileTitleAlignment.center,
-                      )
+                      ),
                     ],
                   ),
                 ),
