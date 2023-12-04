@@ -2,17 +2,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
-class LineGraphMonthlyWidget extends StatefulWidget {
-  const LineGraphMonthlyWidget({super.key});
+class LineGraphYearlyWidget extends StatefulWidget {
+  const LineGraphYearlyWidget({super.key});
 
   @override
-  State<LineGraphMonthlyWidget> createState() => _LineGraphMonthlyWidgetState();
+  State<LineGraphYearlyWidget> createState() => _LineGraphYearlyWidgetState();
 }
 
-class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
+class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
   final _data1 = <double, double>{
     1: 75,
-    2: 10,
+    2: 43,
     3: 20,
     4: 28,
     5: 34,
@@ -66,7 +66,13 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
         ),
       ),
       borderData: FlBorderData(
-        show: false,
+        show: true,
+        border: const Border(
+          bottom: BorderSide(color: Colors.white, width: 15),
+          left: BorderSide(color: Colors.transparent),
+          right: BorderSide(color: Colors.transparent),
+          top: BorderSide(color: Colors.transparent),
+        ),
       ),
       gridData: const FlGridData(show: true, drawVerticalLine: false),
       titlesData: FlTitlesData(

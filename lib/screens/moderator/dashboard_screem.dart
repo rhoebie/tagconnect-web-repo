@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
-import 'package:tagconnectweb/widgets/moderator/barGraph_widget.dart';
-import 'package:tagconnectweb/widgets/moderator/lineGraphMonth_widget.dart';
-import 'package:tagconnectweb/widgets/moderator/pieGraph_widget.dart';
+import 'package:tagconnectweb/widgets/moderator/barGraphWeek_widget.dart';
+import 'package:tagconnectweb/widgets/moderator/lineGraphYear_widget.dart';
+import 'package:tagconnectweb/widgets/moderator/pieGraphTotal_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -13,10 +13,19 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final double val1 = 14.0;
-  final double val2 = 8.0;
-  final double val3 = 23.0;
-  final double val4 = 17.0;
+  double val1 = 14.0;
+  double val2 = 8.0;
+  double val3 = 23.0;
+  double val4 = 17.0;
+
+  double bar1_1 = 14.0;
+  double bar1_2 = 5.0;
+  double bar2_1 = 18.0;
+  double bar2_2 = 28.0;
+  double bar3_1 = 14.0;
+  double bar3_2 = 18.0;
+  double bar4_1 = 11.0;
+  double bar4_2 = 8.0;
   int selectedYear = DateTime.now().year;
 
   Future<void> _selectYear(BuildContext context) async {
@@ -57,31 +66,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hello, Rhoebie Jayriz C. Labrador',
-                      style: TextStyle(
-                        color: tcBlack,
-                        fontFamily: 'Roboto',
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      'How are you doing today?',
-                      style: TextStyle(
-                        color: tcBlack,
-                        fontFamily: 'Roboto',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                Text(
+                  'Dashboard',
+                  style: TextStyle(
+                    color: tcBlack,
+                    fontFamily: 'Roboto',
+                    fontSize: 32.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +147,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Yearly Report',
+                                      'Yearly Total Report',
                                       style: TextStyle(
                                         color: tcBlack,
                                         fontFamily: 'Roboto',
@@ -170,7 +165,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   color: Colors.transparent,
                                 ),
                                 Expanded(
-                                  child: LineGraphWidget(),
+                                  child: LineGraphYearlyWidget(),
                                 )
                               ],
                             ),
@@ -178,305 +173,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         Divider(
                           color: Colors.transparent,
+                          height: 10,
                         ),
                         Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: tcWhite,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Weekly Report',
-                                            style: TextStyle(
-                                              color: tcBlack,
-                                              fontFamily: 'Roboto',
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 5,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcViolet,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'This Week',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              VerticalDivider(
-                                                color: Colors.transparent,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcGray,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'Last Week',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Expanded(
-                                        child: BarGraphWidget(),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: Colors.transparent,
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: tcWhite,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Total Counts',
-                                            style: TextStyle(
-                                              color: tcBlack,
-                                              fontFamily: 'Roboto',
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 5,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcOrange,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'General',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              VerticalDivider(
-                                                color: Colors.transparent,
-                                                width: 10,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcGreen,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'Medical',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              VerticalDivider(
-                                                color: Colors.transparent,
-                                                width: 10,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcRed,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'Fire',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              VerticalDivider(
-                                                color: Colors.transparent,
-                                                width: 10,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                        color: tcBlue,
-                                                        shape: BoxShape.circle),
-                                                  ),
-                                                  VerticalDivider(
-                                                    color: Colors.transparent,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    'Crime',
-                                                    style: TextStyle(
-                                                      color: tcBlack,
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 5,
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.transparent,
-                                      ),
-                                      Expanded(
-                                        child: PieGraphWidget(
-                                          val1: val1,
-                                          val2: val2,
-                                          val3: val3,
-                                          val4: val4,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: tcWhite,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
                       ],
@@ -487,71 +192,314 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     width: 10,
                   ),
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: tcWhite,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Feed Report',
-                            style: TextStyle(
-                              color: tcBlack,
-                              fontFamily: 'Roboto',
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: tcViolet,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          Divider(
-                            color: Colors.transparent,
-                            height: 5,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: tcAsh,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                hintStyle: TextStyle(
-                                  color: tcBlack,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                icon: Icon(
-                                  Icons.search,
-                                  color: tcBlack,
-                                ),
-                                border: InputBorder.none,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Weekly Total Report',
+                                    style: TextStyle(
+                                      color: tcWhite,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.transparent,
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcWhite,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'This Week',
+                                            style: TextStyle(
+                                              color: tcWhite,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      VerticalDivider(
+                                        color: Colors.transparent,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcDark,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'Last Week',
+                                            style: TextStyle(
+                                              color: tcWhite,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
+                              Divider(
+                                color: Colors.transparent,
+                              ),
+                              Expanded(
+                                child: BarGraphWidget(
+                                  bar1_1: bar1_1,
+                                  bar1_2: bar1_2,
+                                  bar2_1: bar2_1,
+                                  bar2_2: bar2_2,
+                                  bar3_1: bar3_1,
+                                  bar3_2: bar3_2,
+                                  bar4_1: bar4_1,
+                                  bar4_2: bar4_2,
+                                ),
+                              )
+                            ],
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: 50,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text('Name $index'),
-                                  subtitle: Text('Subtitle $index'),
-                                  leading: Icon(Icons.person_rounded),
-                                  onTap: () {
-                                    // Handle item tap
-                                    print('Tapped on item $index');
-                                  },
-                                );
-                              },
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                      Divider(
+                        color: Colors.transparent,
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: tcWhite,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Overall Total Report',
+                                    style: TextStyle(
+                                      color: tcBlack,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.transparent,
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcOrange,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'General',
+                                            style: TextStyle(
+                                              color: tcBlack,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      VerticalDivider(
+                                        color: Colors.transparent,
+                                        width: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcGreen,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'Medical',
+                                            style: TextStyle(
+                                              color: tcBlack,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      VerticalDivider(
+                                        color: Colors.transparent,
+                                        width: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcRed,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'Fire',
+                                            style: TextStyle(
+                                              color: tcBlack,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      VerticalDivider(
+                                        color: Colors.transparent,
+                                        width: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                color: tcBlue,
+                                                shape: BoxShape.circle),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'Crime',
+                                            style: TextStyle(
+                                              color: tcBlack,
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.transparent,
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                color: Colors.transparent,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (mounted) {
+                                      setState(() {
+                                        val1 = 20;
+                                        val2 = 35;
+                                        val3 = 8;
+                                        val4 = 12;
+                                      });
+                                    }
+                                  },
+                                  child: PieGraphWidget(
+                                    pie1: val1,
+                                    pie2: val2,
+                                    pie3: val3,
+                                    pie4: val4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ],
               ),
             ),
