@@ -92,35 +92,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Upper Bicutan Dashboard',
-                      style: TextStyle(
-                        color: tcBlack,
-                        fontFamily: 'Roboto',
-                        fontSize: 26.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      'Overview',
-                      style: TextStyle(
-                        color: tcBlack,
-                        fontFamily: 'Roboto',
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                Text(
+                  'Upper Bicutan Dashboard',
+                  style: TextStyle(
+                    color: tcBlack,
+                    fontFamily: 'Roboto',
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15),

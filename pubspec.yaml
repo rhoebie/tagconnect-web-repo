@@ -33,6 +33,11 @@ dependencies:
   flutter_screenutil: ^5.9.0
   intl: ^0.18.1
   fl_chart: ^0.65.0
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  flutter_map_cancellable_tile_provider: ^2.0.0
+  connectivity_plus: ^5.0.2
+  shared_preferences: ^2.2.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

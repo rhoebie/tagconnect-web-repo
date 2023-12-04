@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 import 'package:tagconnectweb/screens/moderator/home_screen.dart';
+import 'package:tagconnectweb/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +19,51 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   bool _passwordVisible = false;
+
+  Future<bool> loginUser(
+      {required String email, required String password}) async {
+    try {
+      bool isConnnected = await NetworkConfig.isConnected();
+      if (isConnnected) {
+        final authService = UserService();
+        final token = await authService.login(email, password);
+
+        if (token != null) {
+          print('User Token: $token');
+          _emailController.clear();
+          _passwordController.clear();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return HomeScreen();
+              },
+            ),
+          );
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('No Internet'),
+            content: const Text('Check your internet connection in settings'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return false;
+      }
+    } catch (e) {
+      print('Error $e');
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,14 +324,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         alignment: Alignment.bottomRight,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return HomeScreen();
-                                },
-                              ),
-                            );
+                          onPressed: () async {
+                            await loginUser(
+                                email: _emailController.text,
+                                password: _passwordController.text);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: tcViolet,

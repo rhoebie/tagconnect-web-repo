@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           _onItemTapped(1);
                         },
                         leading: Icon(
-                          Icons.notes,
+                          Icons.note_alt,
                           color: _currentIndex != 1 ? tcBlack : tcViolet,
                         ),
                         title: Text(
