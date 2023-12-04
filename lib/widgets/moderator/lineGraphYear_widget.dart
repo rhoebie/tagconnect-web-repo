@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class LineGraphYearlyWidget extends StatefulWidget {
@@ -40,7 +41,7 @@ class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
           isCurved: true,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
-            show: true,
+            show: false,
             gradient: LinearGradient(
               colors: [tcWhite, tcViolet],
               begin: Alignment.bottomCenter,
@@ -96,36 +97,8 @@ class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
           sideTitles: SideTitles(
             interval: 1,
             showTitles: true,
-            getTitlesWidget: (double val, _) {
-              switch (val.toInt()) {
-                case 1:
-                  return const Text('Jan');
-                case 2:
-                  return const Text('Feb');
-                case 3:
-                  return const Text('Mar');
-                case 4:
-                  return const Text('Apr');
-                case 5:
-                  return const Text('May');
-                case 6:
-                  return const Text('Jun');
-                case 7:
-                  return const Text('Jul');
-                case 8:
-                  return const Text('Aug');
-                case 9:
-                  return const Text('Sep');
-                case 10:
-                  return const Text('Oct');
-                case 11:
-                  return const Text('Nov');
-                case 12:
-                  return const Text('Dec');
-                default:
-                  return const Text('');
-              }
-            },
+            getTitlesWidget: (double val, _) =>
+                Text(DateFormat.MMM().format(DateTime(2023, val.toInt()))),
           ),
         ),
       ),

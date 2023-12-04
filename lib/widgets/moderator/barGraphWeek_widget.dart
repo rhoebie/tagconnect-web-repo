@@ -11,6 +11,12 @@ class BarGraphWidget extends StatefulWidget {
   final double bar3_2;
   final double bar4_1;
   final double bar4_2;
+  final double bar5_1;
+  final double bar5_2;
+  final double bar6_1;
+  final double bar6_2;
+  final double bar7_1;
+  final double bar7_2;
   const BarGraphWidget(
       {super.key,
       required this.bar1_1,
@@ -20,7 +26,13 @@ class BarGraphWidget extends StatefulWidget {
       required this.bar3_1,
       required this.bar3_2,
       required this.bar4_1,
-      required this.bar4_2});
+      required this.bar4_2,
+      required this.bar5_1,
+      required this.bar5_2,
+      required this.bar6_1,
+      required this.bar6_2,
+      required this.bar7_1,
+      required this.bar7_2});
 
   @override
   State<BarGraphWidget> createState() => _BarGraphWidgetState();
@@ -38,9 +50,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 0,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar1_1, color: tcWhite, width: barWidth),
+                  toY: widget.bar1_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar1_2, color: tcDark, width: barWidth),
+                  toY: widget.bar1_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -48,9 +60,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 1,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar2_1, color: tcWhite, width: barWidth),
+                  toY: widget.bar2_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar2_2, color: tcDark, width: barWidth),
+                  toY: widget.bar2_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -58,9 +70,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 2,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar3_1, color: tcWhite, width: barWidth),
+                  toY: widget.bar3_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar3_2, color: tcDark, width: barWidth),
+                  toY: widget.bar3_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -68,9 +80,39 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 3,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar4_1, color: tcWhite, width: barWidth),
+                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar4_2, color: tcDark, width: barWidth),
+                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+            ],
+            barsSpace: 5.0,
+          ),
+          BarChartGroupData(
+            x: 4,
+            barRods: [
+              BarChartRodData(
+                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+              BarChartRodData(
+                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+            ],
+            barsSpace: 5.0,
+          ),
+          BarChartGroupData(
+            x: 5,
+            barRods: [
+              BarChartRodData(
+                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+              BarChartRodData(
+                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+            ],
+            barsSpace: 5.0,
+          ),
+          BarChartGroupData(
+            x: 6,
+            barRods: [
+              BarChartRodData(
+                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+              BarChartRodData(
+                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -90,11 +132,12 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
         ),
         borderData: FlBorderData(show: false),
         gridData: FlGridData(
-          show: false,
+          show: true,
           drawVerticalLine: false,
           getDrawingHorizontalLine: (value) {
-            return const FlLine(
+            return FlLine(
               color: tcWhite,
+              dashArray: [5, 5],
             );
           },
         ),
@@ -122,22 +165,37 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
                 switch (val.toInt()) {
                   case 0:
                     return const Text(
-                      'General',
+                      'Mon',
                       style: TextStyle(color: tcWhite),
                     );
                   case 1:
                     return const Text(
-                      'Medical',
+                      'Tue',
                       style: TextStyle(color: tcWhite),
                     );
                   case 2:
                     return const Text(
-                      'Fire',
+                      'Wed',
                       style: TextStyle(color: tcWhite),
                     );
                   case 3:
                     return const Text(
-                      'Crime',
+                      'Thu',
+                      style: TextStyle(color: tcWhite),
+                    );
+                  case 4:
+                    return const Text(
+                      'Fri',
+                      style: TextStyle(color: tcWhite),
+                    );
+                  case 5:
+                    return const Text(
+                      'Sat',
+                      style: TextStyle(color: tcWhite),
+                    );
+                  case 6:
+                    return const Text(
+                      'Sun',
                       style: TextStyle(color: tcWhite),
                     );
                   default:

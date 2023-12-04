@@ -1,32 +1,64 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class LineGraphMonthlyWidget extends StatefulWidget {
-  const LineGraphMonthlyWidget({super.key});
+  final String selectedMonth;
+  const LineGraphMonthlyWidget({super.key, required this.selectedMonth});
 
   @override
   State<LineGraphMonthlyWidget> createState() => _LineGraphMonthlyWidgetState();
 }
 
 class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
-  final _data1 = <double, double>{
-    1: 75,
-    2: 10,
-    3: 20,
-    4: 28,
-    5: 34,
-    6: 50,
-    7: 23,
-    8: 20,
-    9: 28,
-    10: 34,
-    11: 50,
-    12: 23,
-  };
+  late Map<double, double> _data1;
+  final List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _updateData();
+  }
+
+  @override
+  void didUpdateWidget(LineGraphMonthlyWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedMonth != oldWidget.selectedMonth) {
+      _updateData();
+    }
+  }
+
+  void _updateData() {
+    DateTime now = DateTime.now();
+    int year = now.year;
+    int monthIndex = months.indexOf(widget.selectedMonth);
+    int daysInMonth = getDaysInMonth(year, monthIndex + 1);
+
+    _data1 = generateRandomData(daysInMonth);
+  }
+
+  int getDaysInMonth(int year, int month) {
+    return DateTime(year, month + 1, 0).day;
+  }
 
   @override
   Widget build(BuildContext context) {
+    _updateData();
     final spots1 = <FlSpot>[
       for (final entry in _data1.entries) FlSpot(entry.key, entry.value)
     ];
@@ -40,7 +72,7 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
           isCurved: true,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
-            show: true,
+            show: false,
             gradient: LinearGradient(
               colors: [tcWhite, tcViolet],
               begin: Alignment.bottomCenter,
@@ -68,7 +100,16 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
       borderData: FlBorderData(
         show: false,
       ),
-      gridData: const FlGridData(show: true, drawVerticalLine: false),
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: tcLightViolet,
+            dashArray: [5, 5],
+          );
+        },
+      ),
       titlesData: FlTitlesData(
         show: true,
         rightTitles: AxisTitles(
@@ -91,33 +132,17 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
             interval: 1,
             showTitles: true,
             getTitlesWidget: (double val, _) {
-              switch (val.toInt()) {
-                case 1:
-                  return const Text('Jan');
-                case 2:
-                  return const Text('Feb');
-                case 3:
-                  return const Text('Mar');
-                case 4:
-                  return const Text('Apr');
-                case 5:
-                  return const Text('May');
-                case 6:
-                  return const Text('Jun');
-                case 7:
-                  return const Text('Jul');
-                case 8:
-                  return const Text('Aug');
-                case 9:
-                  return const Text('Sep');
-                case 10:
-                  return const Text('Oct');
-                case 11:
-                  return const Text('Nov');
-                case 12:
-                  return const Text('Dec');
-                default:
-                  return const Text('');
+              int dayOfMonth = val.toInt();
+
+              int year = 2023;
+              int month = 12;
+              if (dayOfMonth <= DateTime(year, month + 1, 0).day) {
+                return Text(
+                  '$dayOfMonth',
+                  style: TextStyle(color: tcBlack),
+                );
+              } else {
+                return const Text('');
               }
             },
           ),
@@ -126,4 +151,15 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
     );
     return LineChart(lineChartData);
   }
+}
+
+Map<double, double> generateRandomData(int daysInMonth) {
+  final Map<double, double> data = {};
+  final Random random = Random();
+
+  for (int day = 1; day <= daysInMonth; day++) {
+    data[day.toDouble()] = random.nextInt(100).toDouble();
+  }
+
+  return data;
 }
