@@ -207,13 +207,14 @@ class UserService {
         final data = json.decode(response.body);
         final userId = data['user_id'] as int;
         final token = data['token'] as String;
+        final role = data['role'] as String;
 
         // Save the token in SharedPreferences
         await prefs.setInt('userId', userId);
         await prefs.setString('token', token);
         await prefs.setString('userEmail', email);
         await prefs.setString('userPassword', password);
-        return token;
+        return role;
       } else {
         // Handle login error
         print('Login failed. Status code: ${response.statusCode}');

@@ -100,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Upper Bicutan Dashboard',
+                  'Dashboard',
                   style: TextStyle(
                     color: tcBlack,
                     fontFamily: 'Roboto',

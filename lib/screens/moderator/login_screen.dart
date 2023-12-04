@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
-import 'package:tagconnectweb/screens/moderator/home_screen.dart';
+import 'package:tagconnectweb/screens/admin/home_screen.dart' as home_admin;
+import 'package:tagconnectweb/screens/moderator/home_screen.dart'
+    as home_moderator;
 import 'package:tagconnectweb/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,29 +21,36 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   bool _passwordVisible = false;
+  bool isLoading = false;
 
-  Future<bool> loginUser(
+  Future<void> loginUser(
       {required String email, required String password}) async {
     try {
       bool isConnnected = await NetworkConfig.isConnected();
       if (isConnnected) {
         final authService = UserService();
-        final token = await authService.login(email, password);
+        final role = await authService.login(email, password);
 
-        if (token != null) {
-          print('User Token: $token');
+        if (role == 'Moderator') {
           _emailController.clear();
           _passwordController.clear();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return HomeScreen();
+                return const home_moderator.HomeScreen();
               },
             ),
           );
-          return true;
-        } else {
-          return false;
+        } else if (role == 'Admin') {
+          _emailController.clear();
+          _passwordController.clear();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return const home_admin.HomeScreen();
+              },
+            ),
+          );
         }
       } else {
         showDialog(
@@ -57,12 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         );
-        return false;
       }
     } catch (e) {
       print('Error $e');
     }
-    return false;
   }
 
   @override
@@ -318,16 +325,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      Divider(
+                      const Divider(
                         color: Colors.transparent,
                       ),
                       Container(
                         alignment: Alignment.bottomRight,
                         child: ElevatedButton(
                           onPressed: () async {
-                            await loginUser(
-                                email: _emailController.text,
-                                password: _passwordController.text);
+                            if (_formKey.currentState != null &&
+                                _formKey.currentState!.validate()) {
+                              await loginUser(
+                                  email: _emailController.text,
+                                  password: _passwordController.text);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: tcViolet,

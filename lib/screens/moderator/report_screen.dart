@@ -67,14 +67,31 @@ class ReportScreen extends StatelessWidget {
                               map.MarkerLayer(
                                 markers: [
                                   // map.Marker(
-                                  //   width: 80.w,
-                                  //   height: 80.h,
+                                  //   alignment: Alignment.center,
+                                  //   width: 100,
+                                  //   height: 100,
                                   //   point: LatLng(
-                                  //       items.location!.coordinates!.first,
-                                  //       items.location!.coordinates!.last),
-                                  //   child: Icon(
-                                  //     Icons.location_on,
-                                  //     color: Colors.red,
+                                  //       14.522532114364807, 121.05956510721825),
+                                  //   child: Column(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.center,
+                                  //     crossAxisAlignment:
+                                  //         CrossAxisAlignment.center,
+                                  //     children: [
+                                  //       Container(
+                                  //         width: 100,
+                                  //         height: 70,
+                                  //         decoration: BoxDecoration(
+                                  //           color: tcWhite,
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(10),
+                                  //         ),
+                                  //       ),
+                                  //       Icon(
+                                  //         Icons.location_on,
+                                  //         color: Colors.red,
+                                  //       ),
+                                  //     ],
                                   //   ),
                                   // ),
                                 ],
