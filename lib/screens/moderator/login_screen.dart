@@ -76,58 +76,315 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tcWhite,
-      body: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(30),
-              color: tcWhite,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'TagConnect: Act Swiftly, Support Securely',
-                    style: TextStyle(
-                      color: tcBlack,
-                      fontFamily: 'Roboto',
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
+      body: SafeArea(
+        child: Container(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'TCONNECT',
+                      textAlign: TextAlign.center,
+                      style: taguigTheme.textTheme.titleMedium?.copyWith(
+                        color: tcViolet,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 24,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
+                    const Icon(
+                      Icons.location_pin,
                       color: tcRed,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      size: 30,
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  color: tcWhite,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'SIGN IN',
-                            style: TextStyle(
-                              color: tcBlack,
-                              fontFamily: 'Roboto',
-                              fontSize: 28.sp,
+                            'TCONNECT',
+                            textAlign: TextAlign.center,
+                            style: taguigTheme.textTheme.titleMedium?.copyWith(
+                              color: tcViolet,
                               fontWeight: FontWeight.w900,
+                              fontSize: 24,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.location_pin,
+                            color: tcRed,
+                            size: 30,
+                          )
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'WELCOME',
+                                style: taguigTheme.textTheme.headlineLarge
+                                    ?.copyWith(
+                                  color: tcBlack,
+                                  fontSize: 24,
+                                ),
+                              ),
+                              Text(
+                                'Sign in to continue.',
+                                style:
+                                    taguigTheme.textTheme.bodyMedium?.copyWith(
+                                  color: tcBlack,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            color: Colors.transparent,
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  keyboardType: TextInputType.emailAddress,
+                                  controller: _emailController,
+                                  focusNode: _emailFocus,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: tcBlack,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter an email address.';
+                                    } else if (!isValidEmail(value)) {
+                                      return 'Please enter a valid email address.';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Email',
+                                    labelStyle: taguigTheme.textTheme.bodyMedium
+                                        ?.copyWith(
+                                      fontSize: 14.sp,
+                                    ),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 16),
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      size: 20,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcBlack,
+                                        width: 1.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcViolet,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcRed,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcGray,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                Divider(
+                                  color: tcWhite,
+                                ),
+                                TextFormField(
+                                  keyboardType: TextInputType.visiblePassword,
+                                  controller: _passwordController,
+                                  focusNode: _passwordFocus,
+                                  obscureText: !_passwordVisible,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: tcBlack,
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Password cannot be empty';
+                                    }
+                                    return null; // Return null if the input is valid
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    labelStyle: taguigTheme.textTheme.bodyMedium
+                                        ?.copyWith(
+                                      fontSize: 16.sp,
+                                    ),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(vertical: 16),
+                                    prefixIcon: Icon(
+                                      Icons.lock,
+                                      size: 20,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                          print(_passwordVisible);
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _passwordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: tcBlack,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcBlack,
+                                        width: 1.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcViolet,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcRed,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: tcGray,
+                                        width: 2.w,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'Forgot your password?',
+                                        textAlign: TextAlign.center,
+                                        style: taguigTheme.textTheme.labelMedium
+                                            ?.copyWith(
+                                          color: tcViolet,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  )
-                ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 200.w,
+                            height: 120.h,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState != null &&
+                                    _formKey.currentState!.validate()) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  loginUser(
+                                      email: _emailController.text,
+                                      password: _passwordController.text);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              },
+                              style: taguigTheme.elevatedButtonTheme.style,
+                              child: isLoading
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          tcWhite,
+                                        ),
+                                        strokeWidth: 3,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Login',
+                                      textAlign: TextAlign.center,
+                                      style: taguigTheme.textTheme.labelLarge
+                                          ?.copyWith(
+                                        color: tcWhite,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          Expanded(
-            flex: 2,
-            child: Image.asset(
-              'assets/images/incident.jpg',
-              width: 1080,
-              height: 1080,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
