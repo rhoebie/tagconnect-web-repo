@@ -30,7 +30,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
             value: widget.pie1,
             title: widget.pie1.toString(),
             titlePositionPercentageOffset: 1.3,
-            radius: 100,
+            radius: 100.r,
             titleStyle: TextStyle(
               color: tcOrange,
               fontFamily: 'Roboto',
@@ -43,7 +43,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
             value: widget.pie2,
             title: widget.pie2.toString(),
             titlePositionPercentageOffset: 1.3,
-            radius: 100,
+            radius: 100.r,
             titleStyle: TextStyle(
               color: tcGreen,
               fontFamily: 'Roboto',
@@ -56,7 +56,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
             value: widget.pie3,
             title: widget.pie3.toString(),
             titlePositionPercentageOffset: 1.3,
-            radius: 100,
+            radius: 100.r,
             titleStyle: TextStyle(
               color: tcRed,
               fontFamily: 'Roboto',
@@ -69,7 +69,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
             value: widget.pie4,
             title: widget.pie4.toString(),
             titlePositionPercentageOffset: 1.3,
-            radius: 100,
+            radius: 100.r,
             titleStyle: TextStyle(
               color: tcBlue,
               fontFamily: 'Roboto',

@@ -92,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(
@@ -118,8 +118,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onTap: () {},
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: 50.w,
+                          height: 50.h,
                           decoration: BoxDecoration(
                             color: tcWhite,
                             borderRadius: BorderRadius.circular(10),
@@ -127,19 +127,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Icon(
                             Icons.notifications_rounded,
                             color: tcBlack,
+                            size: 30.r,
                           ),
                         ),
                       ),
                       VerticalDivider(
                         color: Colors.transparent,
-                        width: 10,
+                        width: 10.w,
                       ),
                       InkWell(
                         onTap: () {},
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: 50.w,
+                          height: 50.h,
                           decoration: BoxDecoration(
                             color: tcWhite,
                             borderRadius: BorderRadius.circular(10),
@@ -147,6 +148,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Icon(
                             Icons.person_rounded,
                             color: tcBlack,
+                            size: 30.r,
                           ),
                         ),
                       ),
@@ -437,7 +439,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                         Divider(
                           color: Colors.transparent,
-                          height: 10,
+                          height: 20,
                         ),
                         Expanded(
                           child: Container(
@@ -564,7 +566,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   VerticalDivider(
                     color: Colors.transparent,
-                    width: 10,
+                    width: 20,
                   ),
                   Expanded(
                       child: Column(
@@ -690,7 +692,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       Divider(
                         color: Colors.transparent,
-                        height: 10,
+                        height: 20,
                       ),
                       Expanded(
                         child: Container(

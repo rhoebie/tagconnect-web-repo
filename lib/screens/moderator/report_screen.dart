@@ -12,7 +12,7 @@ class ReportScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(20),
         child: Row(
           children: [
             Expanded(
@@ -40,7 +40,7 @@ class ReportScreen extends StatelessWidget {
             ),
             VerticalDivider(
               color: Colors.transparent,
-              width: 10,
+              width: 20,
             ),
             Expanded(
               flex: 3,
@@ -104,7 +104,7 @@ class ReportScreen extends StatelessWidget {
                   ),
                   Divider(
                     color: Colors.transparent,
-                    height: 10,
+                    height: 20,
                   ),
                   Expanded(
                     child: Row(
@@ -134,7 +134,7 @@ class ReportScreen extends StatelessWidget {
                         ),
                         VerticalDivider(
                           color: Colors.transparent,
-                          width: 10,
+                          width: 20,
                         ),
                         Expanded(
                           child: Container(

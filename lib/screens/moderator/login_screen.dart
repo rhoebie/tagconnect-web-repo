@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/configs/network_config.dart';
@@ -75,296 +76,58 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: RichText(
-                  textAlign: TextAlign.start,
-                  text: TextSpan(
+      backgroundColor: tcWhite,
+      body: Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(30),
+              color: tcWhite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'TagConnect: Act Swiftly, Support Securely',
                     style: TextStyle(
-                      fontFamily: 'PublicSans',
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w900,
-                      color: tcViolet,
+                      color: tcBlack,
+                      fontFamily: 'Roboto',
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'TAG',
-                      ),
-                      TextSpan(
-                        text: 'CONNECT ',
-                      ),
-                      TextSpan(
-                        text: 'ADMIN',
-                        style: TextStyle(
-                          color: tcRed,
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  width: 400.w,
-                  height: 350.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'WELCOME',
-                        style: TextStyle(
-                          fontFamily: 'PublicSans',
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.w900,
-                          color: tcBlack,
-                        ),
-                      ),
-                      Text(
-                        'Sign in to continue.',
-                        style: TextStyle(
-                          fontFamily: 'PublicSans',
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                          color: tcGray,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.transparent,
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _emailController,
-                              focusNode: _emailFocus,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                color: tcBlack,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter an email address.';
-                                } else if (!isValidEmail(value)) {
-                                  return 'Please enter a valid email address.';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(
-                                  fontFamily: 'PublicSans',
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: tcBlack,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.email,
-                                  size: 20,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcBlack,
-                                    width: 1.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcViolet,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcRed,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcGray,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                            Divider(
-                              color: Colors.transparent,
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.visiblePassword,
-                              controller: _passwordController,
-                              focusNode: _passwordFocus,
-                              obscureText: !_passwordVisible,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: tcBlack,
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Password cannot be empty';
-                                } else if (value.length < 6) {
-                                  return 'Password should atleast 6 characters or more';
-                                }
-                                return null; // Return null if the input is valid
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: TextStyle(
-                                  fontFamily: 'PublicSans',
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: tcBlack,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  size: 20,
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _passwordVisible = !_passwordVisible;
-                                      print(_passwordVisible);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    _passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: tcBlack,
-                                    size: 20,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcBlack,
-                                    width: 1.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcViolet,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcRed,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: tcGray,
-                                    width: 2.w,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Forgot your password?',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'PublicSans',
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: tcViolet,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(
-                        color: Colors.transparent,
-                      ),
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState != null &&
-                                _formKey.currentState!.validate()) {
-                              await loginUser(
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: tcViolet,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 2,
-                          ),
-                          child: Text(
-                            'Login',
-                            textAlign: TextAlign.center,
+                  Expanded(
+                    child: Container(
+                      color: tcRed,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'SIGN IN',
                             style: TextStyle(
-                              fontFamily: 'PublicSans',
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: tcWhite,
+                              color: tcBlack,
+                              fontFamily: 'Roboto',
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            flex: 2,
+            child: Image.asset(
+              'assets/images/incident.jpg',
+              width: 1080,
+              height: 1080,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
       ),
     );
   }
