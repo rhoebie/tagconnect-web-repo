@@ -19,6 +19,9 @@ class ApiConstants {
   static String userEndpoint = '/users';
   static String reportEndpoint = '/reports';
 
+  // Data for Moderator
+  static String brgyInfoEndpoint = '/moderator-brgy-info';
+
   // Api Url for request
   static String apiUrl = '$baseUrl/api';
 }

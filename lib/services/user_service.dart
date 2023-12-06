@@ -214,6 +214,7 @@ class UserService {
         await prefs.setString('token', token);
         await prefs.setString('userEmail', email);
         await prefs.setString('userPassword', password);
+        print('User Token: $token');
         return role;
       } else {
         // Handle login error
