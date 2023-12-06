@@ -3,23 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
-class PieGraphWidget extends StatefulWidget {
+class PieGraphWidget extends StatelessWidget {
   final double pie1;
   final double pie2;
   final double pie3;
   final double pie4;
-  const PieGraphWidget(
-      {super.key,
-      required this.pie1,
-      required this.pie2,
-      required this.pie3,
-      required this.pie4});
+  const PieGraphWidget({
+    super.key,
+    required this.pie1,
+    required this.pie2,
+    required this.pie3,
+    required this.pie4,
+  });
 
-  @override
-  State<PieGraphWidget> createState() => _PieGraphWidgetState();
-}
-
-class _PieGraphWidgetState extends State<PieGraphWidget> {
   @override
   Widget build(BuildContext context) {
     return PieChart(
@@ -27,8 +23,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
         sections: [
           PieChartSectionData(
             color: tcOrange,
-            value: widget.pie1,
-            title: widget.pie1.toString(),
+            value: pie1,
+            title: pie1.toString(),
             titlePositionPercentageOffset: 1.3,
             radius: 100.r,
             titleStyle: TextStyle(
@@ -40,8 +36,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
           ),
           PieChartSectionData(
             color: tcGreen,
-            value: widget.pie2,
-            title: widget.pie2.toString(),
+            value: pie2,
+            title: pie2.toString(),
             titlePositionPercentageOffset: 1.3,
             radius: 100.r,
             titleStyle: TextStyle(
@@ -53,8 +49,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
           ),
           PieChartSectionData(
             color: tcRed,
-            value: widget.pie3,
-            title: widget.pie3.toString(),
+            value: pie3,
+            title: pie3.toString(),
             titlePositionPercentageOffset: 1.3,
             radius: 100.r,
             titleStyle: TextStyle(
@@ -66,8 +62,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
           ),
           PieChartSectionData(
             color: tcBlue,
-            value: widget.pie4,
-            title: widget.pie4.toString(),
+            value: pie4,
+            title: pie4.toString(),
             titlePositionPercentageOffset: 1.3,
             radius: 100.r,
             titleStyle: TextStyle(

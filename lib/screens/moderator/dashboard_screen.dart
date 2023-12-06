@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
+import 'package:tagconnectweb/models/monthly_model.dart';
 import 'package:tagconnectweb/models/type_model.dart';
 import 'package:tagconnectweb/models/user_model.dart';
+import 'package:tagconnectweb/models/weekly_model.dart';
 import 'package:tagconnectweb/models/yearly_model.dart';
 import 'package:tagconnectweb/services/analytic_service.dart';
 import 'package:tagconnectweb/services/user_service.dart';
@@ -20,45 +22,43 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   final ScrollController _verticalScrollController = ScrollController();
   final ScrollController _horizontalScrollController = ScrollController();
   late String selectedMonth;
   late String selectedYear;
+  String thisDate = '';
+  String lastDate = '';
   bool isMonthly = false;
   List<UserModel>? users;
+  Map<double, double>? yearData;
+  Map<double, double>? monthData;
 
   double val1 = 0;
   double val2 = 0;
   double val3 = 0;
   double val4 = 0;
 
-  double bar1_1 = 14.0;
-  double bar1_2 = 5.0;
-  double bar2_1 = 18.0;
-  double bar2_2 = 28.0;
-  double bar3_1 = 14.0;
-  double bar3_2 = 18.0;
-  double bar4_1 = 11.0;
-  double bar4_2 = 8.0;
-  double bar5_1 = 11.0;
-  double bar5_2 = 8.0;
-  double bar6_1 = 11.0;
-  double bar6_2 = 8.0;
-  double bar7_1 = 11.0;
-  double bar7_2 = 8.0;
+  double bars1_1 = 0;
+  double bars1_2 = 0;
+  double bars2_1 = 0;
+  double bars2_2 = 0;
+  double bars3_1 = 0;
+  double bars3_2 = 0;
+  double bars4_1 = 0;
+  double bars4_2 = 0;
+  double bars5_1 = 0;
+  double bars5_2 = 0;
+  double bars6_1 = 0;
+  double bars6_2 = 0;
+  double bars7_1 = 0;
+  double bars7_2 = 0;
 
-  double january = 0;
-  double febuary = 0;
-  double march = 0;
-  double april = 0;
-  double may = 0;
-  double june = 0;
-  double july = 0;
-  double august = 0;
-  double september = 0;
-  double october = 0;
-  double november = 0;
-  double december = 0;
+  String _formatMap(Map<double, double> map) {
+    return map.entries
+        .map((entry) => '${entry.key}: ${entry.value}')
+        .join(', ');
+  }
 
   Future<void> fetchUsers() async {
     try {
@@ -86,40 +86,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } catch (e) {
       print('Error: $e');
     }
-    return null;
+    return;
   }
 
-  Future<void> fetchYearly() async {
+  Future<void> fetchYearly(int year) async {
     try {
       final analyticService = AnalyticService();
-      final YearlyModel fetchData = await analyticService.getYearlyReport(2023);
-
-      int? jan = fetchData.month?['January'];
-      int? feb = fetchData.month?['Febuary'];
-      int? mar = fetchData.month?['March'];
-      int? apr = fetchData.month?['April'];
-      int? mayy = fetchData.month?['May'];
-      int? jun = fetchData.month?['June'];
-      int? jul = fetchData.month?['July'];
-      int? aug = fetchData.month?['August'];
-      int? sep = fetchData.month?['September'];
-      int? oct = fetchData.month?['October'];
-      int? nov = fetchData.month?['November'];
-      int? dec = fetchData.month?['December'];
+      final YearlyModel fetchData = await analyticService.getYearlyReport(year);
 
       setState(() {
-        january = jan != null ? jan.toDouble() : 0;
-        febuary = feb != null ? feb.toDouble() : 0;
-        march = mar != null ? mar.toDouble() : 0;
-        april = apr != null ? apr.toDouble() : 0;
-        may = mayy != null ? mayy.toDouble() : 0;
-        june = jun != null ? jun.toDouble() : 0;
-        july = jul != null ? jul.toDouble() : 0;
-        august = aug != null ? aug.toDouble() : 0;
-        september = sep != null ? sep.toDouble() : 0;
-        october = oct != null ? oct.toDouble() : 0;
-        november = nov != null ? nov.toDouble() : 0;
-        december = dec != null ? dec.toDouble() : 0;
+        yearData = {};
+
+        fetchData.month?.forEach((String month, int value) {
+          final monthNumber = DateFormat.MMMM().parse(month).month;
+          yearData?[monthNumber.toDouble()] = value.toDouble();
+        });
       });
     } catch (e) {
       print('Error: $e');
@@ -127,10 +108,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return;
   }
 
-  void fetchAll() {
-    fetchUsers();
-    fetchType();
-    fetchYearly();
+  Future<void> fetchMonthly(String month) async {
+    try {
+      final analyticService = AnalyticService();
+      final MonthlyModel fetchData =
+          await analyticService.getMonthlyReport(month);
+
+      setState(() {
+        monthData = {};
+        fetchData.dates?.forEach((String date, int value) {
+          monthData?[double.parse(date)] = value.toDouble();
+        });
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+    return;
+  }
+
+  Future<void> fetchWeekly() async {
+    try {
+      final analyticService = AnalyticService();
+      final WeeklyModel fetchData = await analyticService.getWeeklyReport();
+
+      setState(() {
+        // Date
+        thisDate = fetchData.thisDate ?? '';
+        lastDate = fetchData.lastDate ?? '';
+        // Sunday
+        bars7_1 = fetchData.thisweek?.sunday?.toDouble() ?? 0.0;
+        bars7_2 = fetchData.lastweek?.sunday?.toDouble() ?? 0.0;
+        // Monday
+        bars1_1 = fetchData.thisweek?.monday?.toDouble() ?? 0.0;
+        bars1_2 = fetchData.lastweek?.monday?.toDouble() ?? 0.0;
+        // Tuesday
+        bars2_1 = fetchData.thisweek?.tuesday?.toDouble() ?? 0.0;
+        bars2_2 = fetchData.lastweek?.tuesday?.toDouble() ?? 0.0;
+        // Wednesday
+        bars3_1 = fetchData.thisweek?.wednesday?.toDouble() ?? 0.0;
+        bars3_2 = fetchData.lastweek?.wednesday?.toDouble() ?? 0.0;
+        // Thursday
+        bars4_1 = fetchData.thisweek?.thursday?.toDouble() ?? 0.0;
+        bars4_2 = fetchData.lastweek?.thursday?.toDouble() ?? 0.0;
+        // Friday
+        bars5_1 = fetchData.thisweek?.friday?.toDouble() ?? 0.0;
+        bars5_2 = fetchData.lastweek?.friday?.toDouble() ?? 0.0;
+        // Saturday
+        bars6_1 = fetchData.thisweek?.saturday?.toDouble() ?? 0.0;
+        bars6_2 = fetchData.lastweek?.saturday?.toDouble() ?? 0.0;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+    return;
+  }
+
+  void fetchAll() async {
+    await fetchUsers();
+    await fetchType();
+    await fetchYearly(int.parse(selectedYear));
+    await fetchMonthly(selectedMonth.toLowerCase());
+    await fetchWeekly();
   }
 
   @override
@@ -144,6 +182,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void dispose() {
     _verticalScrollController.dispose();
+    _horizontalScrollController.dispose();
     super.dispose();
   }
 
@@ -279,11 +318,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                           selectedYear =
                                                               newValue;
                                                         });
+                                                        fetchYearly(int.parse(
+                                                            newValue));
                                                       }
                                                     },
                                                     items: [
-                                                      '2020',
-                                                      '2021',
                                                       '2022',
                                                       '2023',
                                                     ].map<
@@ -345,19 +384,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         color: Colors.transparent,
                                       ),
                                       Expanded(
-                                          child: LineGraphYearlyWidget(
-                                              january: january,
-                                              febuary: febuary,
-                                              march: march,
-                                              april: april,
-                                              may: may,
-                                              june: june,
-                                              july: july,
-                                              august: august,
-                                              september: september,
-                                              october: october,
-                                              november: november,
-                                              december: december))
+                                        child: LineGraphYearlyWidget(
+                                            yearData: yearData ?? {}),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -417,6 +446,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                           selectedMonth =
                                                               newValue;
                                                         });
+                                                        fetchMonthly(newValue
+                                                            .toLowerCase());
                                                       }
                                                     },
                                                     items: [
@@ -502,7 +533,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                       Expanded(
                                         child: LineGraphMonthlyWidget(
-                                            selectedMonth: selectedMonth),
+                                          monthData: monthData ?? {},
+                                        ),
                                       )
                                     ],
                                   ),
@@ -551,80 +583,94 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 Expanded(
                                   child: Scrollbar(
-                                    controller: _horizontalScrollController,
+                                    controller: _verticalScrollController,
                                     child: SingleChildScrollView(
-                                      controller: _horizontalScrollController,
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columns: const <DataColumn>[
-                                          DataColumn(
-                                            label: Text('ID'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Role'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('First Name'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Middle Name'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Last Name'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Age'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Birthdate'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Contact Number'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Address'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Email'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Image'),
-                                          ),
-                                          DataColumn(
-                                            label: Text('Status'),
-                                          )
-                                        ],
-                                        rows:
-                                            (users ?? []).map((UserModel user) {
-                                          return DataRow(
-                                            cells: <DataCell>[
-                                              DataCell(Text(
-                                                  user.id?.toString() ?? '')),
-                                              DataCell(Text(user.roleId ?? '')),
-                                              DataCell(
-                                                  Text(user.firstname ?? '')),
-                                              DataCell(
-                                                  Text(user.middlename ?? '')),
-                                              DataCell(
-                                                  Text(user.lastname ?? '')),
-                                              DataCell(Text(
-                                                  user.age?.toString() ?? '')),
-                                              DataCell(Text(
-                                                  user.birthdate?.toString() ??
-                                                      '')),
-                                              DataCell(Text(user.contactnumber
-                                                      ?.toString() ??
-                                                  '')),
-                                              DataCell(
-                                                  Text(user.address ?? '')),
-                                              DataCell(Text(user.email ?? '')),
-                                              DataCell(Text(
-                                                  user.image?.toString() ??
-                                                      '')),
-                                              DataCell(Text(user.status ?? '')),
+                                      controller: _verticalScrollController,
+                                      scrollDirection: Axis.vertical,
+                                      child: Scrollbar(
+                                        controller: _horizontalScrollController,
+                                        child: SingleChildScrollView(
+                                          controller:
+                                              _horizontalScrollController,
+                                          scrollDirection: Axis.horizontal,
+                                          child: DataTable(
+                                            columns: const <DataColumn>[
+                                              DataColumn(
+                                                label: Text('ID'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Role'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('First Name'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Middle Name'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Last Name'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Age'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Birthdate'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Contact Number'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Address'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Email'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Image'),
+                                              ),
+                                              DataColumn(
+                                                label: Text('Status'),
+                                              )
                                             ],
-                                          );
-                                        }).toList(),
+                                            rows: (users ?? [])
+                                                .map((UserModel user) {
+                                              return DataRow(
+                                                cells: <DataCell>[
+                                                  DataCell(Text(
+                                                      user.id?.toString() ??
+                                                          '')),
+                                                  DataCell(
+                                                      Text(user.roleId ?? '')),
+                                                  DataCell(Text(
+                                                      user.firstname ?? '')),
+                                                  DataCell(Text(
+                                                      user.middlename ?? '')),
+                                                  DataCell(Text(
+                                                      user.lastname ?? '')),
+                                                  DataCell(Text(
+                                                      user.age?.toString() ??
+                                                          '')),
+                                                  DataCell(Text(user.birthdate
+                                                          ?.toString() ??
+                                                      '')),
+                                                  DataCell(Text(user
+                                                          .contactnumber
+                                                          ?.toString() ??
+                                                      '')),
+                                                  DataCell(
+                                                      Text(user.address ?? '')),
+                                                  DataCell(
+                                                      Text(user.email ?? '')),
+                                                  DataCell(Text(
+                                                      user.image?.toString() ??
+                                                          '')),
+                                                  DataCell(
+                                                      Text(user.status ?? '')),
+                                                ],
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -692,7 +738,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             width: 5,
                                           ),
                                           Text(
-                                            'This Week',
+                                            'This Week: $thisDate',
                                             style: TextStyle(
                                               color: tcWhite,
                                               fontFamily: 'Roboto',
@@ -723,7 +769,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             width: 5,
                                           ),
                                           Text(
-                                            'Last Week',
+                                            'Last Week: $lastDate',
                                             style: TextStyle(
                                               color: tcWhite,
                                               fontFamily: 'Roboto',
@@ -742,20 +788,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               Expanded(
                                 child: BarGraphWidget(
-                                  bar1_1: bar1_1,
-                                  bar1_2: bar1_2,
-                                  bar2_1: bar2_1,
-                                  bar2_2: bar2_2,
-                                  bar3_1: bar3_1,
-                                  bar3_2: bar3_2,
-                                  bar4_1: bar4_1,
-                                  bar4_2: bar4_2,
-                                  bar5_1: bar5_1,
-                                  bar5_2: bar5_2,
-                                  bar6_1: bar6_1,
-                                  bar6_2: bar6_2,
-                                  bar7_1: bar7_1,
-                                  bar7_2: bar7_2,
+                                  bar1_1: bars1_1,
+                                  bar1_2: bars1_2,
+                                  bar2_1: bars2_1,
+                                  bar2_2: bars2_2,
+                                  bar3_1: bars3_1,
+                                  bar3_2: bars3_2,
+                                  bar4_1: bars4_1,
+                                  bar4_2: bars4_2,
+                                  bar5_1: bars5_1,
+                                  bar5_2: bars5_2,
+                                  bar6_1: bars6_1,
+                                  bar6_2: bars6_2,
+                                  bar7_1: bars7_1,
+                                  bar7_2: bars7_2,
                                 ),
                               )
                             ],
@@ -930,23 +976,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 color: Colors.transparent,
                               ),
                               Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (mounted) {
-                                      setState(() {
-                                        val1 = 20;
-                                        val2 = 35;
-                                        val3 = 8;
-                                        val4 = 12;
-                                      });
-                                    }
-                                  },
-                                  child: PieGraphWidget(
-                                    pie1: val1,
-                                    pie2: val2,
-                                    pie3: val3,
-                                    pie4: val4,
-                                  ),
+                                child: PieGraphWidget(
+                                  pie1: val1,
+                                  pie2: val2,
+                                  pie3: val3,
+                                  pie4: val4,
                                 ),
                               ),
                             ],

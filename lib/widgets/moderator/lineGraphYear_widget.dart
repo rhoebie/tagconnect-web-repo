@@ -3,65 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
-class LineGraphYearlyWidget extends StatefulWidget {
-  final double january;
-  final double febuary;
-  final double march;
-  final double april;
-  final double may;
-  final double june;
-  final double july;
-  final double august;
-  final double september;
-  final double october;
-  final double november;
-  final double december;
-  const LineGraphYearlyWidget(
-      {super.key,
-      required this.january,
-      required this.febuary,
-      required this.march,
-      required this.april,
-      required this.may,
-      required this.june,
-      required this.july,
-      required this.august,
-      required this.september,
-      required this.october,
-      required this.november,
-      required this.december});
-
-  @override
-  State<LineGraphYearlyWidget> createState() => _LineGraphYearlyWidgetState();
-}
-
-class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
-  late Map<double, double> _data1;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _data1 = {
-      1: widget.january,
-      2: widget.febuary,
-      3: widget.march,
-      4: widget.april,
-      5: widget.may,
-      6: widget.june,
-      7: widget.july,
-      8: widget.august,
-      9: widget.september,
-      10: widget.october,
-      11: widget.november,
-      12: widget.december,
-    };
-  }
+class LineGraphYearlyWidget extends StatelessWidget {
+  final Map<double, double> yearData;
+  const LineGraphYearlyWidget({super.key, required this.yearData});
 
   @override
   Widget build(BuildContext context) {
     final spots1 = <FlSpot>[
-      for (final entry in _data1.entries) FlSpot(entry.key, entry.value)
+      for (final entry in yearData.entries) FlSpot(entry.key, entry.value)
     ];
 
     final lineChartData = LineChartData(
@@ -70,7 +19,7 @@ class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
           spots: spots1,
           color: tcViolet,
           barWidth: 5,
-          isCurved: true,
+          isCurved: false,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
             show: false,

@@ -76,7 +76,7 @@ class AnalyticService {
 
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl${ApiConstants.yearlyReportEndpoint}'),
+        Uri.parse('$baseUrl${ApiConstants.monthlyReportEndpoint}'),
         body: json.encode({'month': month}),
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +88,6 @@ class AnalyticService {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         Map<String, dynamic> data = responseData['data'];
-
         return MonthlyModel.fromJson(data);
       } else {
         print(response.statusCode);
@@ -106,7 +105,7 @@ class AnalyticService {
 
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl${ApiConstants.yearlyReportEndpoint}'),
+        Uri.parse('$baseUrl${ApiConstants.weeklyReportEndpoint}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -117,7 +116,7 @@ class AnalyticService {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         Map<String, dynamic> data = responseData['data'];
-
+        print('works');
         return WeeklyModel.fromJson(data);
       } else {
         print(response.statusCode);

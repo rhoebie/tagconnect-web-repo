@@ -50,6 +50,16 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 0,
             barRods: [
               BarChartRodData(
+                  toY: widget.bar7_1, color: tcLightViolet, width: barWidth),
+              BarChartRodData(
+                  toY: widget.bar7_2, color: tcDarkViolet, width: barWidth),
+            ],
+            barsSpace: 5.0,
+          ),
+          BarChartGroupData(
+            x: 1,
+            barRods: [
+              BarChartRodData(
                   toY: widget.bar1_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
                   toY: widget.bar1_2, color: tcDarkViolet, width: barWidth),
@@ -57,7 +67,7 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             barsSpace: 5.0,
           ),
           BarChartGroupData(
-            x: 1,
+            x: 2,
             barRods: [
               BarChartRodData(
                   toY: widget.bar2_1, color: tcLightViolet, width: barWidth),
@@ -67,22 +77,12 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             barsSpace: 5.0,
           ),
           BarChartGroupData(
-            x: 2,
+            x: 3,
             barRods: [
               BarChartRodData(
                   toY: widget.bar3_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
                   toY: widget.bar3_2, color: tcDarkViolet, width: barWidth),
-            ],
-            barsSpace: 5.0,
-          ),
-          BarChartGroupData(
-            x: 3,
-            barRods: [
-              BarChartRodData(
-                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
-              BarChartRodData(
-                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -100,9 +100,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 5,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar5_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar5_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -110,9 +110,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 6,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar6_1, color: tcLightViolet, width: barWidth),
               BarChartRodData(
-                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar6_2, color: tcDarkViolet, width: barWidth),
             ],
             barsSpace: 5.0,
           ),
@@ -165,37 +165,37 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
                 switch (val.toInt()) {
                   case 0:
                     return const Text(
-                      'Mon',
+                      'Sun',
                       style: TextStyle(color: tcWhite),
                     );
                   case 1:
                     return const Text(
-                      'Tue',
+                      'Mon',
                       style: TextStyle(color: tcWhite),
                     );
                   case 2:
                     return const Text(
-                      'Wed',
+                      'Tue',
                       style: TextStyle(color: tcWhite),
                     );
                   case 3:
                     return const Text(
-                      'Thu',
+                      'Wed',
                       style: TextStyle(color: tcWhite),
                     );
                   case 4:
                     return const Text(
-                      'Fri',
+                      'Thu',
                       style: TextStyle(color: tcWhite),
                     );
                   case 5:
                     return const Text(
-                      'Sat',
+                      'Fri',
                       style: TextStyle(color: tcWhite),
                     );
                   case 6:
                     return const Text(
-                      'Sun',
+                      'Sat',
                       style: TextStyle(color: tcWhite),
                     );
                   default:

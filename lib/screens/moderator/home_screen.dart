@@ -143,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Divider(
                           color: Colors.transparent,
+                          height: 20.h,
                         ),
                         Text(
                           'Overview',
@@ -167,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.dashboard_rounded,
                             color: _currentIndex != 0 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Dashboard',
@@ -194,6 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.note_alt_rounded,
                             color: _currentIndex != 1 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Report',
@@ -221,6 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.home_rounded,
                             color: _currentIndex != 2 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Barangay',
@@ -248,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.person_rounded,
                             color: _currentIndex != 3 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Users',
@@ -263,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Divider(
                           color: Colors.transparent,
+                          height: 20.h,
                         ),
                         Text(
                           'Moderator',
@@ -287,6 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.person_rounded,
                             color: _currentIndex != 4 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Account',
@@ -302,6 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Divider(
                           color: Colors.transparent,
+                          height: 20.h,
                         ),
                         Text(
                           'System',
@@ -326,6 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           leading: Icon(
                             Icons.settings_rounded,
                             color: _currentIndex != 5 ? tcBlack : tcViolet,
+                            size: 30.r,
                           ),
                           title: Text(
                             'Settings',

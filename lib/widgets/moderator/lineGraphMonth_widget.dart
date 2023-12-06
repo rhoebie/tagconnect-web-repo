@@ -5,62 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class LineGraphMonthlyWidget extends StatefulWidget {
-  final String selectedMonth;
-  const LineGraphMonthlyWidget({super.key, required this.selectedMonth});
+  final Map<double, double> monthData;
+  const LineGraphMonthlyWidget({super.key, required this.monthData});
 
   @override
   State<LineGraphMonthlyWidget> createState() => _LineGraphMonthlyWidgetState();
 }
 
 class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
-  late Map<double, double> _data1;
-  final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _updateData();
-  }
-
-  @override
-  void didUpdateWidget(LineGraphMonthlyWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedMonth != oldWidget.selectedMonth) {
-      _updateData();
-    }
-  }
-
-  void _updateData() {
-    DateTime now = DateTime.now();
-    int year = now.year;
-    int monthIndex = months.indexOf(widget.selectedMonth);
-    int daysInMonth = getDaysInMonth(year, monthIndex + 1);
-
-    _data1 = generateRandomData(daysInMonth);
-  }
-
-  int getDaysInMonth(int year, int month) {
-    return DateTime(year, month + 1, 0).day;
-  }
-
   @override
   Widget build(BuildContext context) {
-    _updateData();
     final spots1 = <FlSpot>[
-      for (final entry in _data1.entries) FlSpot(entry.key, entry.value)
+      for (final entry in widget.monthData.entries)
+        FlSpot(entry.key, entry.value)
     ];
 
     final lineChartData = LineChartData(
@@ -69,7 +26,7 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
           spots: spots1,
           color: tcViolet,
           barWidth: 5,
-          isCurved: true,
+          isCurved: false,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
             show: false,
@@ -127,23 +84,35 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
             showTitles: false,
           ),
         ),
+        // bottomTitles: AxisTitles(
+        //   sideTitles: SideTitles(
+        //     interval: 1,
+        //     showTitles: true,
+        //     getTitlesWidget: (double val, _) {
+        //       int dayOfMonth = val.toInt();
+
+        //       int year = 2023;
+        //       int month = 12;
+        //       if (dayOfMonth <= DateTime(year, month + 1, 0).day) {
+        //         return Text(
+        //           '$dayOfMonth',
+        //           style: TextStyle(color: tcBlack),
+        //         );
+        //       } else {
+        //         return const Text('');
+        //       }
+        //     },
+        //   ),
+        // ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             interval: 1,
             showTitles: true,
             getTitlesWidget: (double val, _) {
-              int dayOfMonth = val.toInt();
-
-              int year = 2023;
-              int month = 12;
-              if (dayOfMonth <= DateTime(year, month + 1, 0).day) {
-                return Text(
-                  '$dayOfMonth',
-                  style: TextStyle(color: tcBlack),
-                );
-              } else {
-                return const Text('');
+              if (widget.monthData.containsKey(val)) {
+                return Text('${val.toInt()}');
               }
+              return Text('');
             },
           ),
         ),
