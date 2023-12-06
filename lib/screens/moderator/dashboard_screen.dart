@@ -187,6 +187,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void showImageDialog(BuildContext context, String imageUrl) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Image.network(
+                    imageUrl,
+                    width: 350,
+                    height: 350,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
@@ -660,9 +689,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       Text(user.address ?? '')),
                                                   DataCell(
                                                       Text(user.email ?? '')),
-                                                  DataCell(Text(
-                                                      user.image?.toString() ??
-                                                          '')),
+                                                  // DataCell(user.image != null
+                                                  //     ? InkWell(
+                                                  //         onTap: () {
+                                                  //           showImageDialog(
+                                                  //               context,
+                                                  //               user.image);
+                                                  //         },
+                                                  //         child: Text(
+                                                  //           'View',
+                                                  //           style: TextStyle(
+                                                  //             color: tcViolet,
+                                                  //           ),
+                                                  //         ),
+                                                  //       )
+                                                  //     : Text('')),
+                                                  DataCell(
+                                                      Text(user.image ?? '')),
                                                   DataCell(
                                                       Text(user.status ?? '')),
                                                 ],
@@ -996,4 +1039,164 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+}
+
+class UserDataTableSource extends DataTableSource {
+  final List<UserModel> _users;
+
+  UserDataTableSource(this._users);
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= _users.length) {
+      return null;
+    }
+    final user = _users[index];
+
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(
+          Text(
+            user.id?.toString() ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.roleId ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.firstname ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.middlename ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.lastname ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.age?.toString() ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.birthdate?.toString() ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.contactnumber?.toString() ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.address ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.email ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.image?.toString() ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            user.status ?? '',
+            style: TextStyle(
+              color: tcBlack,
+              fontFamily: 'PublicSans',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => _users.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
