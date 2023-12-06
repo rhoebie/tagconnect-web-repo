@@ -7,6 +7,33 @@ import 'package:tagconnectweb/models/user_model.dart';
 class UserService {
   final String baseUrl = ApiConstants.apiUrl;
 
+  Future<List<UserModel>?> getAllUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl${ApiConstants.userInfoEndpoint}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the response JSON
+      Map<String, dynamic> responseData = json.decode(response.body);
+
+      // Extract the "data" list from the response and provide default values for fields
+      final List<dynamic> data = responseData['data'];
+
+      return data.map((item) => UserModel.fromJson(item)).toList();
+    } else {
+      print(response.statusCode);
+      print(response.body);
+      throw Exception('Failed to load user');
+    }
+  }
+
   Future<UserModel> getUserById(int id) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
@@ -14,6 +41,7 @@ class UserService {
     final response = await http.get(
       Uri.parse('$baseUrl${ApiConstants.userEndpoint}/$id'),
       headers: {
+        'Content-Type': 'application/json',
         'Authorization':
             'Bearer $token', // Include the token as an Authorization header
       },

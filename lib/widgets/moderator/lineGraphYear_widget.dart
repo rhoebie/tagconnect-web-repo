@@ -4,27 +4,59 @@ import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class LineGraphYearlyWidget extends StatefulWidget {
-  const LineGraphYearlyWidget({super.key});
+  final double january;
+  final double febuary;
+  final double march;
+  final double april;
+  final double may;
+  final double june;
+  final double july;
+  final double august;
+  final double september;
+  final double october;
+  final double november;
+  final double december;
+  const LineGraphYearlyWidget(
+      {super.key,
+      required this.january,
+      required this.febuary,
+      required this.march,
+      required this.april,
+      required this.may,
+      required this.june,
+      required this.july,
+      required this.august,
+      required this.september,
+      required this.october,
+      required this.november,
+      required this.december});
 
   @override
   State<LineGraphYearlyWidget> createState() => _LineGraphYearlyWidgetState();
 }
 
 class _LineGraphYearlyWidgetState extends State<LineGraphYearlyWidget> {
-  final _data1 = <double, double>{
-    1: 75,
-    2: 43,
-    3: 20,
-    4: 28,
-    5: 34,
-    6: 50,
-    7: 23,
-    8: 20,
-    9: 28,
-    10: 34,
-    11: 50,
-    12: 23,
-  };
+  late Map<double, double> _data1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _data1 = {
+      1: widget.january,
+      2: widget.febuary,
+      3: widget.march,
+      4: widget.april,
+      5: widget.may,
+      6: widget.june,
+      7: widget.july,
+      8: widget.august,
+      9: widget.september,
+      10: widget.october,
+      11: widget.november,
+      12: widget.december,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -20,6 +20,11 @@ class ApiConstants {
   static String reportEndpoint = '/reports';
 
   // Data for Moderator
+  static String userInfoEndpoint = '/moderator-get-users';
+  static String countTypeEndpoint = '/moderator-report-types';
+  static String yearlyReportEndpoint = '/moderator-yearly-report';
+  static String monthlyReportEndpoint = '/moderator-monthly-report';
+  static String weeklyReportEndpoint = '/moderator-weekly-report';
   static String brgyInfoEndpoint = '/moderator-brgy-info';
 
   // Api Url for request

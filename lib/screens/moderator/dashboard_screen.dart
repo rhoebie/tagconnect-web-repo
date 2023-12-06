@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
+import 'package:tagconnectweb/models/type_model.dart';
 import 'package:tagconnectweb/models/user_model.dart';
+import 'package:tagconnectweb/models/yearly_model.dart';
+import 'package:tagconnectweb/services/analytic_service.dart';
+import 'package:tagconnectweb/services/user_service.dart';
 import 'package:tagconnectweb/widgets/moderator/barGraphWeek_widget.dart';
 import 'package:tagconnectweb/widgets/moderator/lineGraphMonth_widget.dart';
 import 'package:tagconnectweb/widgets/moderator/lineGraphYear_widget.dart';
@@ -16,48 +20,17 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _verticalScrollController = ScrollController();
+  final ScrollController _horizontalScrollController = ScrollController();
   late String selectedMonth;
   late String selectedYear;
   bool isMonthly = false;
-  final List<UserModel> users = [
-    UserModel(
-      id: 1,
-      roleId: 'user',
-      firstname: 'John',
-      lastname: 'Doe',
-      age: 25,
-      birthdate: '1998-05-15',
-      contactnumber: '1234567890',
-      address: '123 Main St, City',
-      email: 'john.doe@example.com',
-      image: null,
-      status: 'Verified',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    UserModel(
-      id: 2,
-      roleId: 'admin',
-      firstname: 'Jane',
-      lastname: 'Doe',
-      age: 30,
-      birthdate: '1992-08-20',
-      contactnumber: '9876543210',
-      address:
-          'Block 121 Lot 11 Phase 8 Sitio Imelda Upper Bicutan Taguig City',
-      email: 'jane.doe@example.com',
-      image: null,
-      status: 'Verified',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-  ];
+  List<UserModel>? users;
 
-  double val1 = 14.0;
-  double val2 = 8.0;
-  double val3 = 23.0;
-  double val4 = 17.0;
+  double val1 = 0;
+  double val2 = 0;
+  double val3 = 0;
+  double val4 = 0;
 
   double bar1_1 = 14.0;
   double bar1_2 = 5.0;
@@ -74,16 +47,103 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double bar7_1 = 11.0;
   double bar7_2 = 8.0;
 
+  double january = 0;
+  double febuary = 0;
+  double march = 0;
+  double april = 0;
+  double may = 0;
+  double june = 0;
+  double july = 0;
+  double august = 0;
+  double september = 0;
+  double october = 0;
+  double november = 0;
+  double december = 0;
+
+  Future<void> fetchUsers() async {
+    try {
+      final userService = UserService();
+      final List<UserModel>? fetchData = await userService.getAllUser();
+      setState(() {
+        users = fetchData;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+    return null;
+  }
+
+  Future<void> fetchType() async {
+    try {
+      final analyticService = AnalyticService();
+      final TypeModel fetchData = await analyticService.getTypeCount();
+      setState(() {
+        val1 = fetchData.general != null ? fetchData.general!.toDouble() : 0;
+        val2 = fetchData.medical != null ? fetchData.medical!.toDouble() : 0;
+        val3 = fetchData.fire != null ? fetchData.fire!.toDouble() : 0;
+        val4 = fetchData.crime != null ? fetchData.crime!.toDouble() : 0;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+    return null;
+  }
+
+  Future<void> fetchYearly() async {
+    try {
+      final analyticService = AnalyticService();
+      final YearlyModel fetchData = await analyticService.getYearlyReport(2023);
+
+      int? jan = fetchData.month?['January'];
+      int? feb = fetchData.month?['Febuary'];
+      int? mar = fetchData.month?['March'];
+      int? apr = fetchData.month?['April'];
+      int? mayy = fetchData.month?['May'];
+      int? jun = fetchData.month?['June'];
+      int? jul = fetchData.month?['July'];
+      int? aug = fetchData.month?['August'];
+      int? sep = fetchData.month?['September'];
+      int? oct = fetchData.month?['October'];
+      int? nov = fetchData.month?['November'];
+      int? dec = fetchData.month?['December'];
+
+      setState(() {
+        january = jan != null ? jan.toDouble() : 0;
+        febuary = feb != null ? feb.toDouble() : 0;
+        march = mar != null ? mar.toDouble() : 0;
+        april = apr != null ? apr.toDouble() : 0;
+        may = mayy != null ? mayy.toDouble() : 0;
+        june = jun != null ? jun.toDouble() : 0;
+        july = jul != null ? jul.toDouble() : 0;
+        august = aug != null ? aug.toDouble() : 0;
+        september = sep != null ? sep.toDouble() : 0;
+        october = oct != null ? oct.toDouble() : 0;
+        november = nov != null ? nov.toDouble() : 0;
+        december = dec != null ? dec.toDouble() : 0;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+    return;
+  }
+
+  void fetchAll() {
+    fetchUsers();
+    fetchType();
+    fetchYearly();
+  }
+
   @override
   void initState() {
     super.initState();
     selectedMonth = DateFormat('MMMM').format(DateTime.now());
     selectedYear = DateFormat('yyyy').format(DateTime.now());
+    fetchAll();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _verticalScrollController.dispose();
     super.dispose();
   }
 
@@ -285,8 +345,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         color: Colors.transparent,
                                       ),
                                       Expanded(
-                                        child: LineGraphYearlyWidget(),
-                                      )
+                                          child: LineGraphYearlyWidget(
+                                              january: january,
+                                              febuary: febuary,
+                                              march: march,
+                                              april: april,
+                                              may: may,
+                                              june: june,
+                                              july: july,
+                                              august: august,
+                                              september: september,
+                                              october: october,
+                                              november: november,
+                                              december: december))
                                     ],
                                   ),
                                 ),
@@ -480,9 +551,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 Expanded(
                                   child: Scrollbar(
-                                    controller: _scrollController,
+                                    controller: _horizontalScrollController,
                                     child: SingleChildScrollView(
-                                      controller: _scrollController,
+                                      controller: _horizontalScrollController,
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
                                         columns: const <DataColumn>[
@@ -490,7 +561,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             label: Text('ID'),
                                           ),
                                           DataColumn(
-                                            label: Text('Role ID'),
+                                            label: Text('Role'),
                                           ),
                                           DataColumn(
                                             label: Text('First Name'),
@@ -523,7 +594,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             label: Text('Status'),
                                           )
                                         ],
-                                        rows: users.map((UserModel user) {
+                                        rows:
+                                            (users ?? []).map((UserModel user) {
                                           return DataRow(
                                             cells: <DataCell>[
                                               DataCell(Text(

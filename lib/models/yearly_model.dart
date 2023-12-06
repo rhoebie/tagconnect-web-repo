@@ -10,7 +10,7 @@ YearlyModel yearlyModelFromJson(String str) =>
 String yearlyModelToJson(YearlyModel data) => json.encode(data.toJson());
 
 class YearlyModel {
-  String? year;
+  int? year;
   Map<String, int>? month;
 
   YearlyModel({
