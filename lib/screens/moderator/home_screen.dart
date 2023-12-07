@@ -66,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(left: 10, bottom: 20),
                 child: Column(
                   children: [
                     SizedBox(
@@ -145,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20.h,
                     ),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Overview',
@@ -273,6 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20.h,
                     ),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Account',
@@ -317,6 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20.h,
                     ),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Settings',

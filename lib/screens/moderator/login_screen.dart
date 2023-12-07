@@ -443,6 +443,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           alignment: Alignment.center,
                           child: ProgressButton.icon(
+                              height: 53.h,
+                              radius: 100.r,
                               iconedButtons: {
                                 ButtonState.idle: IconedButton(
                                     text: 'Login',

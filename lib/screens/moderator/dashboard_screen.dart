@@ -194,59 +194,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void showImageDialog(BuildContext context, String imageUrl) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Image(
-                    width: 500,
-                    height: 500,
-                    image: NetworkImage(
-                      imageUrl,
-                    ),
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return SizedBox(
-                          width: 500,
-                          height: 500,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                    },
-                    errorBuilder: (BuildContext context, Object error,
-                        StackTrace? stackTrace) {
-                      return SizedBox(
-                        width: 500,
-                        height: 500,
-                        child: Icon(Icons.error),
-                      );
-                    },
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
@@ -752,17 +699,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              DataColumn(
-                                                label: Text(
-                                                  'Image',
-                                                  style: TextStyle(
-                                                    color: tcBlack,
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 16.sp,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              ),
                                             ],
                                             rows: (users ?? [])
                                                 .map((UserModel user) {
@@ -863,27 +799,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  DataCell(
-                                                    user.image != null
-                                                        ? InkWell(
-                                                            onTap: () {
-                                                              showImageDialog(
-                                                                context,
-                                                                user.image,
-                                                              );
-                                                            },
-                                                            child: Text(
-                                                              'View',
-                                                              style: TextStyle(
-                                                                color: tcViolet,
-                                                                fontSize: 14.sp,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const Text(''),
-                                                  ),
-                                                  // DataCell(
-                                                  //     Text(user.image ?? '')),
                                                 ],
                                               );
                                             }).toList(),
