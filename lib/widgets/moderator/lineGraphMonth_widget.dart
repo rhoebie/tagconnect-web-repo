@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class LineGraphMonthlyWidget extends StatefulWidget {
@@ -25,7 +24,7 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
         LineChartBarData(
           spots: spots1,
           color: tcViolet,
-          barWidth: 5,
+          barWidth: 5.w,
           isCurved: false,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
@@ -47,7 +46,7 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
                 final flSpot = spot.bar.spots[spot.spotIndex];
                 return LineTooltipItem(
                   flSpot.y.toString(),
-                  TextStyle(color: tcWhite),
+                  TextStyle(color: tcWhite, fontSize: 14.sp),
                 );
               },
             ).toList();
@@ -84,33 +83,16 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
             showTitles: false,
           ),
         ),
-        // bottomTitles: AxisTitles(
-        //   sideTitles: SideTitles(
-        //     interval: 1,
-        //     showTitles: true,
-        //     getTitlesWidget: (double val, _) {
-        //       int dayOfMonth = val.toInt();
-
-        //       int year = 2023;
-        //       int month = 12;
-        //       if (dayOfMonth <= DateTime(year, month + 1, 0).day) {
-        //         return Text(
-        //           '$dayOfMonth',
-        //           style: TextStyle(color: tcBlack),
-        //         );
-        //       } else {
-        //         return const Text('');
-        //       }
-        //     },
-        //   ),
-        // ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             interval: 1,
             showTitles: true,
             getTitlesWidget: (double val, _) {
               if (widget.monthData.containsKey(val)) {
-                return Text('${val.toInt()}');
+                return Text(
+                  '${val.toInt()}',
+                  style: TextStyle(color: tcBlack, fontSize: 14.sp),
+                );
               }
               return Text('');
             },
@@ -120,15 +102,4 @@ class _LineGraphMonthlyWidgetState extends State<LineGraphMonthlyWidget> {
     );
     return LineChart(lineChartData);
   }
-}
-
-Map<double, double> generateRandomData(int daysInMonth) {
-  final Map<double, double> data = {};
-  final Random random = Random();
-
-  for (int day = 1; day <= daysInMonth; day++) {
-    data[day.toDouble()] = random.nextInt(100).toDouble();
-  }
-
-  return data;
 }

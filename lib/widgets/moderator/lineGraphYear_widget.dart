@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
@@ -18,7 +19,7 @@ class LineGraphYearlyWidget extends StatelessWidget {
         LineChartBarData(
           spots: spots1,
           color: tcViolet,
-          barWidth: 5,
+          barWidth: 5.w,
           isCurved: false,
           dotData: const FlDotData(show: true),
           belowBarData: BarAreaData(
@@ -40,7 +41,7 @@ class LineGraphYearlyWidget extends StatelessWidget {
                 final flSpot = spot.bar.spots[spot.spotIndex];
                 return LineTooltipItem(
                   flSpot.y.toString(),
-                  TextStyle(color: tcWhite),
+                  TextStyle(color: tcWhite, fontSize: 14.sp),
                 );
               },
             ).toList();
@@ -78,8 +79,10 @@ class LineGraphYearlyWidget extends StatelessWidget {
           sideTitles: SideTitles(
             interval: 1,
             showTitles: true,
-            getTitlesWidget: (double val, _) =>
-                Text(DateFormat.MMM().format(DateTime(2023, val.toInt()))),
+            getTitlesWidget: (double val, _) => Text(
+              DateFormat.MMM().format(DateTime(2023, val.toInt())),
+              style: TextStyle(color: tcBlack, fontSize: 14.sp),
+            ),
           ),
         ),
       ),

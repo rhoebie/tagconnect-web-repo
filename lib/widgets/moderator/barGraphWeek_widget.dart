@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 
 class BarGraphWidget extends StatefulWidget {
@@ -39,7 +40,7 @@ class BarGraphWidget extends StatefulWidget {
 }
 
 class _BarGraphWidgetState extends State<BarGraphWidget> {
-  double barWidth = 15.0;
+  double barWidth = 15;
   @override
   Widget build(BuildContext context) {
     return BarChart(
@@ -50,9 +51,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 0,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar7_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar7_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar7_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar7_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -60,9 +61,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 1,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar1_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar1_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar1_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar1_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -70,9 +71,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 2,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar2_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar2_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar2_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar2_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -80,9 +81,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 3,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar3_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar3_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar3_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar3_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -90,9 +91,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 4,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar4_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar4_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -100,9 +101,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 5,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar5_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar5_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar5_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar5_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -110,9 +111,9 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
             x: 6,
             barRods: [
               BarChartRodData(
-                  toY: widget.bar6_1, color: tcLightViolet, width: barWidth),
+                  toY: widget.bar6_1, color: tcLightViolet, width: barWidth.w),
               BarChartRodData(
-                  toY: widget.bar6_2, color: tcDarkViolet, width: barWidth),
+                  toY: widget.bar6_2, color: tcDarkViolet, width: barWidth.w),
             ],
             barsSpace: 5.0,
           ),
@@ -125,7 +126,7 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
               String value = rod.toY.toString();
               return BarTooltipItem(
                 value,
-                const TextStyle(color: tcWhite),
+                TextStyle(color: tcWhite, fontSize: 14.sp),
               );
             },
           ),
@@ -164,42 +165,42 @@ class _BarGraphWidgetState extends State<BarGraphWidget> {
               getTitlesWidget: (double val, _) {
                 switch (val.toInt()) {
                   case 0:
-                    return const Text(
+                    return Text(
                       'Sun',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 1:
-                    return const Text(
+                    return Text(
                       'Mon',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 2:
-                    return const Text(
+                    return Text(
                       'Tue',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 3:
-                    return const Text(
+                    return Text(
                       'Wed',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 4:
-                    return const Text(
+                    return Text(
                       'Thu',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 5:
-                    return const Text(
+                    return Text(
                       'Fri',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   case 6:
-                    return const Text(
+                    return Text(
                       'Sat',
-                      style: TextStyle(color: tcWhite),
+                      style: TextStyle(color: tcWhite, fontSize: 14.sp),
                     );
                   default:
-                    return const Text('');
+                    return Text('');
                 }
               },
             ),

@@ -31,7 +31,7 @@ class PieGraphWidget extends StatelessWidget {
               color: tcOrange,
               fontFamily: 'Roboto',
               fontSize: 18.sp,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           PieChartSectionData(
@@ -44,7 +44,7 @@ class PieGraphWidget extends StatelessWidget {
               color: tcGreen,
               fontFamily: 'Roboto',
               fontSize: 18.sp,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           PieChartSectionData(
@@ -57,7 +57,7 @@ class PieGraphWidget extends StatelessWidget {
               color: tcRed,
               fontFamily: 'Roboto',
               fontSize: 18.sp,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           PieChartSectionData(
@@ -70,7 +70,7 @@ class PieGraphWidget extends StatelessWidget {
               color: tcBlue,
               fontFamily: 'Roboto',
               fontSize: 18.sp,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],

@@ -134,24 +134,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // Date
         thisDate = fetchData.thisDate ?? '';
         lastDate = fetchData.lastDate ?? '';
+
         // Sunday
         bars7_1 = fetchData.thisweek?.sunday?.toDouble() ?? 0.0;
         bars7_2 = fetchData.lastweek?.sunday?.toDouble() ?? 0.0;
+
         // Monday
         bars1_1 = fetchData.thisweek?.monday?.toDouble() ?? 0.0;
         bars1_2 = fetchData.lastweek?.monday?.toDouble() ?? 0.0;
+
         // Tuesday
         bars2_1 = fetchData.thisweek?.tuesday?.toDouble() ?? 0.0;
         bars2_2 = fetchData.lastweek?.tuesday?.toDouble() ?? 0.0;
+
         // Wednesday
         bars3_1 = fetchData.thisweek?.wednesday?.toDouble() ?? 0.0;
         bars3_2 = fetchData.lastweek?.wednesday?.toDouble() ?? 0.0;
+
         // Thursday
         bars4_1 = fetchData.thisweek?.thursday?.toDouble() ?? 0.0;
         bars4_2 = fetchData.lastweek?.thursday?.toDouble() ?? 0.0;
+
         // Friday
         bars5_1 = fetchData.thisweek?.friday?.toDouble() ?? 0.0;
         bars5_2 = fetchData.lastweek?.friday?.toDouble() ?? 0.0;
+
         // Saturday
         bars6_1 = fetchData.thisweek?.saturday?.toDouble() ?? 0.0;
         bars6_2 = fetchData.lastweek?.saturday?.toDouble() ?? 0.0;
@@ -196,11 +203,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Image.network(
-                    imageUrl,
-                    width: 350,
-                    height: 350,
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Image(
+                    width: 500,
+                    height: 500,
+                    image: NetworkImage(
+                      imageUrl,
+                    ),
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return SizedBox(
+                          width: 500,
+                          height: 500,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      return SizedBox(
+                        width: 500,
+                        height: 500,
+                        child: Icon(Icons.error),
+                      );
+                    },
                   ),
                 ),
                 TextButton(
@@ -316,13 +347,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                'Yearly Report',
-                                                style: TextStyle(
-                                                  color: tcBlack,
+                                              Tooltip(
+                                                message:
+                                                    'This shows the yearly report of your barangay',
+                                                child: Text(
+                                                  'Yearly Report',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                textStyle: TextStyle(
+                                                  color: tcWhite,
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
                                               Row(
@@ -402,6 +443,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 Icon(
                                                   Icons.swap_horiz_rounded,
                                                   color: tcBlack,
+                                                  size: 30.r,
                                                 ),
                                               ],
                                             ),
@@ -440,13 +482,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                'Monthly Report',
-                                                style: TextStyle(
-                                                  color: tcBlack,
+                                              Tooltip(
+                                                message:
+                                                    'This shows the monthly report of your barangay',
+                                                child: Text(
+                                                  'Monthly Report',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                textStyle: TextStyle(
+                                                  color: tcWhite,
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
                                               Row(
@@ -550,6 +602,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 Icon(
                                                   Icons.swap_horiz_rounded,
                                                   color: tcBlack,
+                                                  size: 30.r,
                                                 ),
                                               ],
                                             ),
@@ -582,32 +635,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Users Data',
-                                      style: TextStyle(
-                                        color: tcBlack,
-                                        fontFamily: 'Roboto',
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
+                                Tooltip(
+                                  message:
                                       'This shows all the users that reported to your barangay',
-                                      style: TextStyle(
-                                        color: tcGray,
-                                        fontFamily: 'Publicsans',
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                  child: Text(
+                                    'Users Data',
+                                    style: TextStyle(
+                                      color: tcBlack,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                  ],
+                                  ),
+                                  textStyle: TextStyle(
+                                    color: tcWhite,
+                                    fontFamily: 'Roboto',
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                                 Divider(
                                   color: Colors.transparent,
-                                  height: 5,
+                                  height: 5.h,
                                 ),
                                 Expanded(
                                   child: Scrollbar(
@@ -622,92 +671,249 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               _horizontalScrollController,
                                           scrollDirection: Axis.horizontal,
                                           child: DataTable(
-                                            columns: const <DataColumn>[
+                                            columns: <DataColumn>[
                                               DataColumn(
-                                                label: Text('ID'),
+                                                label: Text(
+                                                  'ID',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Role'),
+                                                label: Text(
+                                                  'Role',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('First Name'),
+                                                label: Text(
+                                                  'First Name',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Middle Name'),
+                                                label: Text(
+                                                  'Middle Name',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Last Name'),
+                                                label: Text(
+                                                  'Last Name',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Age'),
+                                                label: Text(
+                                                  'Age',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Birthdate'),
+                                                label: Text(
+                                                  'Birthdate',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Contact Number'),
+                                                label: Text(
+                                                  'Contact Number',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Address'),
+                                                label: Text(
+                                                  'Address',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Email'),
+                                                label: Text(
+                                                  'Email',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
                                               DataColumn(
-                                                label: Text('Image'),
+                                                label: Text(
+                                                  'Image',
+                                                  style: TextStyle(
+                                                    color: tcBlack,
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ),
-                                              DataColumn(
-                                                label: Text('Status'),
-                                              )
                                             ],
                                             rows: (users ?? [])
                                                 .map((UserModel user) {
                                               return DataRow(
                                                 cells: <DataCell>[
-                                                  DataCell(Text(
-                                                      user.id?.toString() ??
-                                                          '')),
                                                   DataCell(
-                                                      Text(user.roleId ?? '')),
-                                                  DataCell(Text(
-                                                      user.firstname ?? '')),
-                                                  DataCell(Text(
-                                                      user.middlename ?? '')),
-                                                  DataCell(Text(
-                                                      user.lastname ?? '')),
-                                                  DataCell(Text(
+                                                    Text(
+                                                      user.id?.toString() ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      user.roleId ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      user.firstname ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      user.middlename ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
+                                                      user.lastname ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(
                                                       user.age?.toString() ??
-                                                          '')),
-                                                  DataCell(Text(user.birthdate
-                                                          ?.toString() ??
-                                                      '')),
-                                                  DataCell(Text(user
-                                                          .contactnumber
-                                                          ?.toString() ??
-                                                      '')),
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
                                                   DataCell(
-                                                      Text(user.address ?? '')),
+                                                    Text(
+                                                      user.birthdate
+                                                              ?.toString() ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
                                                   DataCell(
-                                                      Text(user.email ?? '')),
-                                                  // DataCell(user.image != null
-                                                  //     ? InkWell(
-                                                  //         onTap: () {
-                                                  //           showImageDialog(
-                                                  //               context,
-                                                  //               user.image);
-                                                  //         },
-                                                  //         child: Text(
-                                                  //           'View',
-                                                  //           style: TextStyle(
-                                                  //             color: tcViolet,
-                                                  //           ),
-                                                  //         ),
-                                                  //       )
-                                                  //     : Text('')),
+                                                    Text(
+                                                      user.contactnumber
+                                                              ?.toString() ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
                                                   DataCell(
-                                                      Text(user.image ?? '')),
+                                                    Text(
+                                                      user.address ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
                                                   DataCell(
-                                                      Text(user.status ?? '')),
+                                                    Text(
+                                                      user.email ?? '',
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    user.image != null
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              showImageDialog(
+                                                                context,
+                                                                user.image,
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              'View',
+                                                              style: TextStyle(
+                                                                color: tcViolet,
+                                                                fontSize: 14.sp,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : const Text(''),
+                                                  ),
+                                                  // DataCell(
+                                                  //     Text(user.image ?? '')),
                                                 ],
                                               );
                                             }).toList(),
@@ -744,13 +950,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Weekly Total Report',
-                                    style: TextStyle(
+                                  Tooltip(
+                                    message:
+                                        'This week date: $thisDate, Last week date: $lastDate',
+                                    child: Text(
+                                      'Weekly Report',
+                                      style: TextStyle(
+                                        color: tcWhite,
+                                        fontFamily: 'Roboto',
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    textStyle: TextStyle(
                                       color: tcWhite,
                                       fontFamily: 'Roboto',
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   Divider(
@@ -780,7 +996,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             width: 5,
                                           ),
                                           Text(
-                                            'This Week: $thisDate',
+                                            'This Week',
                                             style: TextStyle(
                                               color: tcWhite,
                                               fontFamily: 'Roboto',
@@ -811,7 +1027,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             width: 5,
                                           ),
                                           Text(
-                                            'Last Week: $lastDate',
+                                            'Last Week',
                                             style: TextStyle(
                                               color: tcWhite,
                                               fontFamily: 'Roboto',
@@ -867,13 +1083,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Overall Total Report',
-                                    style: TextStyle(
-                                      color: tcBlack,
+                                  Tooltip(
+                                    message:
+                                        'This shows the total report by emergency type',
+                                    child: Text(
+                                      'Overall Total Report',
+                                      style: TextStyle(
+                                        color: tcBlack,
+                                        fontFamily: 'Roboto',
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    textStyle: TextStyle(
+                                      color: tcWhite,
                                       fontFamily: 'Roboto',
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   Divider(
