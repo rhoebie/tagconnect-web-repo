@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'package:provider/provider.dart';
 import 'package:tagconnectweb/animations/fade_animation.dart';
 import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
+import 'package:tagconnectweb/constant/provider_constant.dart';
+import 'package:tagconnectweb/models/credential_model.dart';
 import 'package:tagconnectweb/screens/admin/home_screen.dart' as home_admin;
 import 'package:tagconnectweb/screens/moderator/home_screen.dart'
     as home_moderator;
 import 'package:tagconnectweb/services/user_service.dart';
+import 'dart:html' as html;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,6 +35,53 @@ class _LoginScreenState extends State<LoginScreen> {
   String? userRole;
   ButtonState stateOnlyText = ButtonState.idle;
   ButtonState stateTextWithIcon = ButtonState.idle;
+  late AutoLoginNotifier autoLoginNotifier;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    autoLoginNotifier = Provider.of<AutoLoginNotifier>(context, listen: false);
+    loadSavedCredentials();
+  }
+
+  Future<void> saveCredentials() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    // Create a CredentialModel instance
+    final credentialModel = CredentialModel(email: email, password: password);
+
+    // Convert CredentialModel to JSON
+    final jsonCredentials = json.encode(credentialModel.toJson());
+
+    // Save JSON to local storage
+    html.window.localStorage['credentials'] = jsonCredentials;
+
+    print('Credentials saved to local storage');
+  }
+
+  Future<void> loadSavedCredentials() async {
+    try {
+      // Retrieve JSON from local storage
+      final jsonCredentials = html.window.localStorage['credentials'];
+
+      if (jsonCredentials != null) {
+        // Parse JSON into a CredentialModel instance
+        final credentialModel =
+            CredentialModel.fromJson(json.decode(jsonCredentials));
+
+        // Set email and password from CredentialModel
+        _emailController.text = credentialModel.email ?? '';
+        _passwordController.text = credentialModel.password ?? '';
+
+        print('Credentials loaded from local storage');
+      } else {
+        print('Credentials not found in local storage.');
+      }
+    } catch (e) {
+      print('Error loading credentials: $e');
+    }
+  }
 
   Future<bool> loginUser(
       {required String email, required String password}) async {
@@ -39,9 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
         final role = await authService.login(email, password);
 
         if (role != null) {
-          // if (rememberMe) {
-          //   saveCredentials();
-          // }
+          if (rememberMe) {
+            saveCredentials();
+          }
           print('User role: $role');
           _emailController.clear();
           _passwordController.clear();

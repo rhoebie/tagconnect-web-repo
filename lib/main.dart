@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tagconnectweb/screens/moderator/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:tagconnectweb/constant/provider_constant.dart';
+import 'package:tagconnectweb/screens/moderator/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider(create: (_) => AutoLoginNotifier()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +29,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'System',
-          home: LoginScreen(),
+          home: SplashScreen(),
         );
       },
     );

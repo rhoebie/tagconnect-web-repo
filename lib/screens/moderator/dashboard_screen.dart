@@ -266,51 +266,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          width: 50.w,
-                          height: 50.h,
-                          decoration: BoxDecoration(
-                            color: tcWhite,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            Icons.notifications_rounded,
-                            color: tcBlack,
-                            size: 30.r,
-                          ),
-                        ),
-                      ),
-                      VerticalDivider(
-                        color: Colors.transparent,
-                        width: 10.w,
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          width: 50.w,
-                          height: 50.h,
-                          decoration: BoxDecoration(
-                            color: tcWhite,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            Icons.person_rounded,
-                            color: tcBlack,
-                            size: 30.r,
-                          ),
-                        ),
-                      ),
-                    ],
+                InkWell(
+                  onTap: () {},
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: 50.w,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      color: tcWhite,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.notifications_rounded,
+                      color: tcBlack,
+                      size: 30.r,
+                    ),
                   ),
                 ),
               ],
