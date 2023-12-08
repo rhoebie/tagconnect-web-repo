@@ -15,8 +15,8 @@ class UserModel {
   String? middlename;
   String? lastname;
   int? age;
-  dynamic birthdate;
-  dynamic contactnumber;
+  String? birthdate;
+  String? contactnumber;
   String? address;
   String? email;
   dynamic image;
@@ -48,7 +48,7 @@ class UserModel {
         middlename: json["middlename"],
         lastname: json["lastname"],
         age: json["age"],
-        birthdate: json["birthdate"],
+        birthdate: json["birthdate"] == null ? null : json["birthdate"],
         contactnumber: json["contactnumber"],
         address: json["address"],
         email: json["email"],

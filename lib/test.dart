@@ -13,7 +13,8 @@ class _DataTableWidState extends State<DataTableWid> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: PaginatedDataTable(
-        header: const Text('Nutrition'),
+        //header: const Text('Nutrition'),
+        showCheckboxColumn: false,
         rowsPerPage: _rowsPerPage,
         availableRowsPerPage: const <int>[5, 10, 20],
         onRowsPerPageChanged: (int? value) {
@@ -21,6 +22,7 @@ class _DataTableWidState extends State<DataTableWid> {
             setState(() => _rowsPerPage = value);
           }
         },
+        //actions: [IconButton(onPressed: () {}, icon: Icon(Icons.abc))],
         columns: <DataColumn>[
           DataColumn(
             label: Text('Dessert (100g serving)'),

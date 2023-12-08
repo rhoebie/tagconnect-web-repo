@@ -24,6 +24,8 @@ class ReportModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  bool selected;
+
   ReportModel({
     this.id,
     this.userId,
@@ -38,6 +40,7 @@ class ReportModel {
     this.status,
     this.createdAt,
     this.updatedAt,
+    this.selected = false,
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) => ReportModel(

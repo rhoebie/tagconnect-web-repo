@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
-import 'package:flutter_map/flutter_map.dart' as map;
+import 'package:flutter_map/flutter_map.dart';
 import 'package:tagconnectweb/models/report_model.dart';
 import 'package:tagconnectweb/models/user_model.dart';
 import 'package:tagconnectweb/services/report_service.dart';
@@ -20,20 +20,25 @@ class _ReportScreenState extends State<ReportScreen> {
   double selectedLatitude = 0.0;
   double selectedLongitude = 0.0;
   String selectedValue = "Submitted";
-  late UserModel userModel = UserModel(
-      firstname: '',
-      lastname: '',
-      age: 0,
-      birthdate: '',
-      contactnumber: '',
-      address: '',
-      image: '');
+  bool isTileSelected = false;
+  UserModel? userModel;
+  ReportModel? reportModel;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<List<ReportModel>> fetchReport() async {
     try {
       final reportService = ReportService();
       final List<ReportModel> fetchReportData =
           await reportService.getReports();
+
+      // Initialize selected field to false for each item
+      for (var report in fetchReportData) {
+        report.selected = false;
+      }
       return fetchReportData;
     } catch (e) {
       print('Error fetching reportData: $e');
@@ -65,7 +70,7 @@ class _ReportScreenState extends State<ReportScreen> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: tcWhite,
                   borderRadius: BorderRadius.circular(10),
@@ -221,6 +226,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                             onChanged: (String? newValue) {
                                               if (mounted) {
                                                 setState(() {
+                                                  userModel = null;
+                                                  reportModel = null;
                                                   selectedValue = newValue!;
                                                 });
                                               }
@@ -254,29 +261,30 @@ class _ReportScreenState extends State<ReportScreen> {
                                         );
                                       } else {
                                         return ListTile(
+                                          selected: item.selected,
+                                          selectedTileColor: tcViolet,
                                           onTap: () async {
                                             await fetchUser(item.userId!);
-                                            if (item.location!.latitude ==
-                                                    null ||
-                                                item.location!.longitude ==
-                                                    null) {
-                                              print('Location Null');
-                                            } else {
-                                              setState(() {
+                                            setState(() {
+                                              item.selected = !item.selected;
+
+                                              if (item.selected) {
+                                                reportModel = item;
                                                 selectedLatitude =
                                                     item.location!.latitude!;
                                                 selectedLongitude =
                                                     item.location!.longitude!;
-                                              });
-                                            }
+                                              } else {
+                                                // Handle deselection logic if needed
+                                              }
+                                            });
                                           },
                                           titleAlignment:
                                               ListTileTitleAlignment.center,
                                           title: Text(
-                                            'Report ID: ${item.userId}',
+                                            'Report ID: ${item.id}',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
-                                              color: tcBlack,
                                               fontFamily: 'PublisSans',
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.w700,
@@ -287,7 +295,6 @@ class _ReportScreenState extends State<ReportScreen> {
                                                 item.createdAt.toString()),
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
-                                              color: tcBlack,
                                               fontFamily: 'PublisSans',
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.w400,
@@ -335,35 +342,60 @@ class _ReportScreenState extends State<ReportScreen> {
                         color: tcWhite,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Stack(
-                        children: [
-                          map.FlutterMap(
-                            options: const map.MapOptions(
-                                initialCenter: LatLng(
-                                    14.522532114364807, 121.05956510721825),
-                                initialZoom: 13),
-                            children: [
-                              map.TileLayer(
-                                urlTemplate:
-                                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Column(
+                          children: [
+                            Container(
+                              color: tcViolet,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                'Viewing Report ID: ${reportModel?.id ?? 'No Report Selected'}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: tcWhite,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              map.MarkerLayer(
-                                markers: [
-                                  map.Marker(
-                                    alignment: Alignment.center,
-                                    point: LatLng(
-                                        selectedLatitude, selectedLongitude),
-                                    child: Icon(
-                                      Icons.location_on,
-                                      color: tcRed,
-                                      size: 60.r,
-                                    ),
+                            ),
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  FlutterMap(
+                                    options: MapOptions(
+                                        initialCenter: LatLng(
+                                            14.496916262855029,
+                                            121.0503352882308),
+                                        initialZoom: 13),
+                                    children: [
+                                      TileLayer(
+                                        urlTemplate:
+                                            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                      ),
+                                      MarkerLayer(
+                                        markers: [
+                                          Marker(
+                                            alignment: Alignment.center,
+                                            point: LatLng(selectedLatitude,
+                                                selectedLongitude),
+                                            child: Icon(
+                                              Icons.location_on,
+                                              color: tcRed,
+                                              size: 60.r,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -381,312 +413,401 @@ class _ReportScreenState extends State<ReportScreen> {
                               color: tcWhite,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: ListView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'User Information',
-                                  style: TextStyle(
-                                    color: tcBlack,
-                                    fontFamily: 'Roboto',
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w700,
+                                SizedBox(
+                                  child: Text(
+                                    'User Information',
+                                    style: TextStyle(
+                                      color: tcBlack,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                                 Divider(
                                   color: Colors.transparent,
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${userModel.lastname}, ${userModel.firstname} ${userModel.middlename}',
-                                      style: TextStyle(
-                                        color: tcBlack,
-                                        fontFamily: 'PublicSans',
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                      height: 5,
-                                    ),
-                                    RichText(
-                                      textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          fontFamily: 'PublicSans',
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: tcBlack,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: 'Account ID: ',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: userModel.id.toString(),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                      height: 5,
-                                    ),
-                                    RichText(
-                                      textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          fontFamily: 'PublicSans',
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: tcBlack,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: 'Role: ',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: userModel.roleId,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                      height: 30,
-                                    ),
-                                    Text(
-                                      'Personal Information',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: tcBlack,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 20),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Birth Date',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
-                                                ),
-                                              ),
-                                              Text(
-                                                userModel.birthdate.toString(),
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: tcBlack,
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Age',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
-                                                ),
-                                              ),
-                                              Text(
-                                                userModel.age.toString(),
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: tcBlack,
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Address',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 150,
-                                                child: Text(
-                                                  userModel.address ?? '',
-                                                  textAlign: TextAlign.end,
+                                Expanded(
+                                  child: ListView(
+                                    children: [
+                                      reportModel != null
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
                                                   style: TextStyle(
+                                                    color: tcBlack,
                                                     fontFamily: 'PublicSans',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                  height: 5,
+                                                ),
+                                                RichText(
+                                                  textAlign: TextAlign.start,
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                      fontFamily: 'PublicSans',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: tcBlack,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Account ID: ',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: userModel?.id
+                                                                .toString() ??
+                                                            '',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                  height: 5,
+                                                ),
+                                                RichText(
+                                                  textAlign: TextAlign.start,
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                      fontFamily: 'PublicSans',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: tcBlack,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Role: ',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            userModel?.roleId ??
+                                                                '',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                  height: 30,
+                                                ),
+                                                Text(
+                                                  'Personal Information',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w700,
                                                     color: tcBlack,
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                      height: 30,
-                                    ),
-                                    Text(
-                                      'Contact Information',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: tcBlack,
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 20),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Contact',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
+                                                Divider(
+                                                  color: Colors.transparent,
                                                 ),
-                                              ),
-                                              Text(
-                                                userModel.contactnumber ?? '',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: tcBlack,
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Birth Date',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            userModel?.birthdate
+                                                                    .toString() ??
+                                                                '',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              color: tcBlack,
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Age',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            userModel?.age
+                                                                    .toString() ??
+                                                                '',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              color: tcBlack,
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Address',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            width: 150,
+                                                            child: Text(
+                                                              userModel
+                                                                      ?.address ??
+                                                                  '',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'PublicSans',
+                                                                fontSize: 14.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: tcBlack,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Email',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                  height: 30,
                                                 ),
-                                              ),
-                                              Text(
-                                                userModel.email ?? '',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: tcBlack,
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
+                                                Text(
+                                                  'Contact Information',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: tcBlack,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Status',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: tcBlack,
+                                                Divider(
+                                                  color: Colors.transparent,
                                                 ),
-                                              ),
-                                              Text(
-                                                userModel.status ?? '',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: tcBlack,
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                            color: Colors.transparent,
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Contact',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            userModel
+                                                                    ?.contactnumber ??
+                                                                '',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              color: tcBlack,
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Email',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            userModel?.email ??
+                                                                '',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              color: tcBlack,
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Status',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            userModel?.status ??
+                                                                '',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                              color: tcBlack,
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color:
+                                                            Colors.transparent,
+                                                        height: 10,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -706,13 +827,381 @@ class _ReportScreenState extends State<ReportScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Report Information',
-                                  style: TextStyle(
-                                    color: tcBlack,
-                                    fontFamily: 'Roboto',
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w700,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      child: Text(
+                                        'Report Information',
+                                        style: TextStyle(
+                                          color: tcBlack,
+                                          fontFamily: 'Roboto',
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                    selectedValue == 'Submitted'
+                                        ? SizedBox(
+                                            child: ElevatedButton(
+                                              onPressed: () {},
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: tcGreen,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                elevation: 2,
+                                              ),
+                                              child: Text(
+                                                'Process',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: 'PublicSans',
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: tcWhite,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : selectedValue == 'Processing'
+                                            ? SizedBox(
+                                                child: ElevatedButton(
+                                                  onPressed: () {},
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor: tcGreen,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    elevation: 2,
+                                                  ),
+                                                  child: Text(
+                                                    'Resolve',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontFamily: 'PublicSans',
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: tcWhite,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                  ],
+                                ),
+                                Divider(
+                                  color: Colors.transparent,
+                                ),
+                                Expanded(
+                                  child: ListView(
+                                    children: [
+                                      reportModel != null
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Name: ${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: tcBlack,
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Date: ${formatCustomDateTime(reportModel?.createdAt.toString() ?? '')}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Visibility',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.visibility ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Report ID',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.id
+                                                              .toString() ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Barangay ID',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.barangayId
+                                                              .toString() ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'For Whom?',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.forWhom ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Any Casualties?',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.casualties ==
+                                                              1
+                                                          ? 'Yes'
+                                                          : 'No',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Status',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel?.status ?? '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Description',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      reportModel
+                                                              ?.description ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'PublicSans',
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: tcBlack,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          : Container(),
+                                    ],
                                   ),
                                 ),
                               ],
