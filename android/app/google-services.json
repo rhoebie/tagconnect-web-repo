@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458229749603",
+    "project_id": "tagconnect-901a4",
+    "storage_bucket": "tagconnect-901a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458229749603:android:153fbd22b9132866c06556",
+        "android_client_info": {
+          "package_name": "com.example.tagconnectweb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCApz6oE1TS58qjdczcKzoPOUDxeo_MvsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
