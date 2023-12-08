@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagconnectweb/animations/fade_animation.dart';
 import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
@@ -96,11 +97,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<bool> loginUser(
       {required String email, required String password}) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
+      final tokenFcm = prefs.getString('fCMToken') ?? '';
       bool isConnnected = await NetworkConfig.isConnected();
       if (isConnnected) {
         final authService = UserService();
-        final token = await authService.login(email, password);
+        final token = await authService.login(email, password, tokenFcm);
 
         if (token != null) {
           return true;
@@ -131,9 +134,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final Color backgroundColor = theme.scaffoldBackgroundColor;
-
     return Scaffold(
       backgroundColor: tcWhite,
       body: SafeArea(

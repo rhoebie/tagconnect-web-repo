@@ -1,22 +1,22 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseApiService {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: false,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      await _firebaseMessaging.requestPermission();
 
-    final fCMToken = await _firebaseMessaging.getToken(
-        vapidKey:
-            'BBBVTTmkvRoQ4P2VYtvWOYtiTjDsZX7aZF-8QFkQ-72OGIcjgke9_LkNB4gWVWKkdtmhJF4mkxZ1JlrJ8Edl9Ss');
-    print('Token: $fCMToken');
+      String fCMToken = await _firebaseMessaging.getToken(
+              vapidKey:
+                  'BBBVTTmkvRoQ4P2VYtvWOYtiTjDsZX7aZF-8QFkQ-72OGIcjgke9_LkNB4gWVWKkdtmhJF4mkxZ1JlrJ8Edl9Ss') ??
+          '';
+      await prefs.setString('fCMToken', fCMToken);
+      print('Token: $fCMToken');
+    } catch (e) {
+      print('Error initializing notifications: $e');
+    }
   }
 }

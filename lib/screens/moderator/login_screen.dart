@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagconnectweb/animations/fade_animation.dart';
 import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
@@ -85,11 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<bool> loginUser(
       {required String email, required String password}) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
+      final tokenFcm = prefs.getString('fCMToken') ?? '';
       bool isConnnected = await NetworkConfig.isConnected();
       if (isConnnected) {
         final authService = UserService();
-        final role = await authService.login(email, password);
+        final role = await authService.login(email, password, tokenFcm);
 
         if (role != null) {
           if (rememberMe) {
