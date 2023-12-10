@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseMessaging.onMessage.listen((event) {
+      if (event.notification == null) return;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(event.notification?.title ?? ''),
+            content: Text(event.notification?.body ?? ''),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          );
+        },
+      ).then((value) {
+        if (value != null && value) {
+          print('User pressed "Yes"');
+        } else {
+          print('User pressed "No" or dismissed the dialog');
+        }
+      });
+    });
   }
 
   @override

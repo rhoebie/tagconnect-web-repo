@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "458229749603",
-    "project_id": "tagconnect-901a4",
-    "storage_bucket": "tagconnect-901a4.appspot.com"
+    "project_number": "635427748371",
+    "project_id": "thesistagconnect",
+    "storage_bucket": "thesistagconnect.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:458229749603:android:153fbd22b9132866c06556",
+        "mobilesdk_app_id": "1:635427748371:android:4b54de4c7ed4a75c9f1de6",
         "android_client_info": {
           "package_name": "com.example.tagconnectweb"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCApz6oE1TS58qjdczcKzoPOUDxeo_MvsY"
+          "current_key": "AIzaSyDrGfsT4hDVokBS0M8lLu4O1anT_SE-I_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635427748371:android:2583d08ba424a0659f1de6",
+        "android_client_info": {
+          "package_name": "com.example.taguigconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrGfsT4hDVokBS0M8lLu4O1anT_SE-I_E"
         }
       ],
       "services": {

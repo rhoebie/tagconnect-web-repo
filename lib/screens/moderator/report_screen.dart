@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:tagconnectweb/models/report_model.dart';
@@ -60,8 +64,109 @@ class _ReportScreenState extends State<ReportScreen> {
     }
   }
 
+  Future<void> processReport(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    try {
+      final response = await http.post(
+        Uri.parse('https://taguigconnect.online/api/moderator-update-process'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'reportId': id,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {});
+        print(response.body);
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> resolveReport(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    try {
+      final response = await http.post(
+        Uri.parse('https://taguigconnect.online/api/moderator-update-resolved'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'reportId': id,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {});
+        print(response.body);
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    void showImageDialog(BuildContext context, String imageUrl) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Image.network(
+                    imageUrl,
+                    width: 350.w,
+                    height: 350.w,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      return Icon(Icons.error);
+                    },
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color: tcViolet, fontSize: 14.sp),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: tcAsh,
       body: Container(
@@ -438,74 +543,162 @@ class _ReportScreenState extends State<ReportScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  '${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
-                                                  style: TextStyle(
-                                                    color: tcBlack,
-                                                    fontFamily: 'PublicSans',
-                                                    fontSize: 16.sp,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                Divider(
-                                                  color: Colors.transparent,
-                                                  height: 5,
-                                                ),
-                                                RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                    style: TextStyle(
-                                                      fontFamily: 'PublicSans',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: tcBlack,
-                                                    ),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Account ID: ',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          '${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
+                                                          style: TextStyle(
+                                                            color: tcBlack,
+                                                            fontFamily:
+                                                                'PublicSans',
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: userModel?.id
-                                                                .toString() ??
-                                                            '',
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Divider(
-                                                  color: Colors.transparent,
-                                                  height: 5,
-                                                ),
-                                                RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                    style: TextStyle(
-                                                      fontFamily: 'PublicSans',
-                                                      fontSize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: tcBlack,
-                                                    ),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Role: ',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                        Divider(
+                                                          color: Colors
+                                                              .transparent,
+                                                          height: 5,
                                                         ),
+                                                        RichText(
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          text: TextSpan(
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    'Account ID: ',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                              ),
+                                                              TextSpan(
+                                                                text: userModel
+                                                                        ?.id
+                                                                        .toString() ??
+                                                                    '',
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Divider(
+                                                          color: Colors
+                                                              .transparent,
+                                                          height: 5,
+                                                        ),
+                                                        RichText(
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          text: TextSpan(
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'PublicSans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: tcBlack,
+                                                            ),
+                                                            children: [
+                                                              TextSpan(
+                                                                text: 'Role: ',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                              ),
+                                                              TextSpan(
+                                                                text: userModel
+                                                                        ?.roleId ??
+                                                                    '',
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 100.w,
+                                                      height: 100.w,
+                                                      child: ClipOval(
+                                                        child:
+                                                            userModel!.image !=
+                                                                    null
+                                                                ? InkWell(
+                                                                    onTap: () {
+                                                                      showImageDialog(
+                                                                          context,
+                                                                          userModel!
+                                                                              .image);
+                                                                    },
+                                                                    child: Image
+                                                                        .network(
+                                                                      userModel!
+                                                                          .image,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      loadingBuilder: (BuildContext context,
+                                                                          Widget
+                                                                              child,
+                                                                          ImageChunkEvent?
+                                                                              loadingProgress) {
+                                                                        if (loadingProgress ==
+                                                                            null) {
+                                                                          return child;
+                                                                        } else {
+                                                                          return Center(
+                                                                            child:
+                                                                                CircularProgressIndicator(),
+                                                                          );
+                                                                        }
+                                                                      },
+                                                                      errorBuilder: (BuildContext context,
+                                                                          Object
+                                                                              error,
+                                                                          StackTrace?
+                                                                              stackTrace) {
+                                                                        return Icon(
+                                                                            Icons.error);
+                                                                      },
+                                                                    ),
+                                                                  )
+                                                                : Center(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .question_mark,
+                                                                      size: 50,
+                                                                      color:
+                                                                          tcBlack,
+                                                                    ),
+                                                                  ),
                                                       ),
-                                                      TextSpan(
-                                                        text:
-                                                            userModel?.roleId ??
-                                                                '',
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                                 Divider(
                                                   color: Colors.transparent,
@@ -846,7 +1039,12 @@ class _ReportScreenState extends State<ReportScreen> {
                                     selectedValue == 'Submitted'
                                         ? SizedBox(
                                             child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                if (reportModel?.id != null) {
+                                                  processReport(
+                                                      reportModel!.id!);
+                                                }
+                                              },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: tcGreen,
                                                 shape: RoundedRectangleBorder(
@@ -870,7 +1068,13 @@ class _ReportScreenState extends State<ReportScreen> {
                                         : selectedValue == 'Processing'
                                             ? SizedBox(
                                                 child: ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    if (reportModel?.id !=
+                                                        null) {
+                                                      resolveReport(
+                                                          reportModel!.id!);
+                                                    }
+                                                  },
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     backgroundColor: tcGreen,
@@ -909,35 +1113,107 @@ class _ReportScreenState extends State<ReportScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Column(
+                                                Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.center,
                                                   children: [
-                                                    Text(
-                                                      'Name: ${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: tcBlack,
-                                                        fontFamily: 'Roboto',
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          'Name: ${userModel?.lastname ?? ''}, ${userModel?.firstname ?? ''} ${userModel?.middlename ?? ''}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: tcBlack,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'Date: ${formatCustomDateTime(reportModel?.createdAt.toString() ?? '')}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'PublicSans',
+                                                            fontSize: 14.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: tcBlack,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      'Date: ${formatCustomDateTime(reportModel?.createdAt.toString() ?? '')}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'PublicSans',
-                                                        fontSize: 14.sp,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: tcBlack,
+                                                    SizedBox(
+                                                      width: 100.w,
+                                                      height: 100.w,
+                                                      child: ClipOval(
+                                                        child: reportModel
+                                                                    ?.image !=
+                                                                null
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  showImageDialog(
+                                                                      context,
+                                                                      reportModel!
+                                                                          .image!);
+                                                                },
+                                                                child: Image
+                                                                    .network(
+                                                                  reportModel!
+                                                                      .image!,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  loadingBuilder: (BuildContext
+                                                                          context,
+                                                                      Widget
+                                                                          child,
+                                                                      ImageChunkEvent?
+                                                                          loadingProgress) {
+                                                                    if (loadingProgress ==
+                                                                        null) {
+                                                                      return child;
+                                                                    } else {
+                                                                      return Center(
+                                                                        child:
+                                                                            CircularProgressIndicator(),
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  errorBuilder: (BuildContext
+                                                                          context,
+                                                                      Object
+                                                                          error,
+                                                                      StackTrace?
+                                                                          stackTrace) {
+                                                                    return Icon(
+                                                                        Icons
+                                                                            .error);
+                                                                  },
+                                                                ),
+                                                              )
+                                                            : Center(
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .question_mark,
+                                                                  size: 50,
+                                                                  color:
+                                                                      tcBlack,
+                                                                ),
+                                                              ),
                                                       ),
                                                     ),
                                                   ],

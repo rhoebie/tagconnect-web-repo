@@ -8,6 +8,11 @@ class BarangayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: tcAsh,
+      body: Container(
+        child: Column(
+          children: [],
+        ),
+      ),
     );
   }
 }
