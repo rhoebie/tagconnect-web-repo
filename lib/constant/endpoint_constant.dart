@@ -13,7 +13,7 @@ class ApiConstants {
 
   // Data of the user
   static String newsEndpoint = '/user-news';
-  static String barangayEndpoint = '/user-barangay';
+  static String barangayEndpoint = '/barangays';
   static String userReport = '/user-reports';
   static String feedReports = '/user-feed-reports';
   static String userEndpoint = '/users';

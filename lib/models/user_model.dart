@@ -72,7 +72,6 @@ class UserModel {
         "birthdate": birthdate,
         "contactnumber": contactnumber,
         "address": address,
-        "email": email,
         "image": image,
         "status": status,
         "created_at": createdAt?.toIso8601String(),

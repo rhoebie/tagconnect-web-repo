@@ -27,6 +27,7 @@ class _ReportScreenState extends State<ReportScreen> {
   bool isTileSelected = false;
   UserModel? userModel;
   ReportModel? reportModel;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -80,7 +81,12 @@ class _ReportScreenState extends State<ReportScreen> {
       );
 
       if (response.statusCode == 200) {
-        setState(() {});
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+
         print(response.body);
       } else {
         print(response.statusCode);
@@ -107,7 +113,11 @@ class _ReportScreenState extends State<ReportScreen> {
       );
 
       if (response.statusCode == 200) {
-        setState(() {});
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
         print(response.body);
       } else {
         print(response.statusCode);
@@ -1037,41 +1047,19 @@ class _ReportScreenState extends State<ReportScreen> {
                                       ),
                                     ),
                                     selectedValue == 'Submitted'
-                                        ? SizedBox(
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                if (reportModel?.id != null) {
-                                                  processReport(
-                                                      reportModel!.id!);
-                                                }
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: tcGreen,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                elevation: 2,
-                                              ),
-                                              child: Text(
-                                                'Process',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: 'PublicSans',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: tcWhite,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : selectedValue == 'Processing'
-                                            ? SizedBox(
+                                        ? isLoading
+                                            ? CircularProgressIndicator()
+                                            : SizedBox(
                                                 child: ElevatedButton(
                                                   onPressed: () {
+                                                    if (mounted) {
+                                                      setState(() {
+                                                        isLoading = true;
+                                                      });
+                                                    }
                                                     if (reportModel?.id !=
                                                         null) {
-                                                      resolveReport(
+                                                      processReport(
                                                           reportModel!.id!);
                                                     }
                                                   },
@@ -1087,7 +1075,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                     elevation: 2,
                                                   ),
                                                   child: Text(
-                                                    'Resolve',
+                                                    'Process',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily: 'PublicSans',
@@ -1099,6 +1087,50 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                 ),
                                               )
+                                        : selectedValue == 'Processing'
+                                            ? isLoading
+                                                ? CircularProgressIndicator()
+                                                : SizedBox(
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        if (mounted) {
+                                                          setState(() {
+                                                            isLoading = true;
+                                                          });
+                                                        }
+                                                        if (reportModel?.id !=
+                                                            null) {
+                                                          resolveReport(
+                                                              reportModel!.id!);
+                                                        }
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            tcGreen,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        elevation: 2,
+                                                      ),
+                                                      child: Text(
+                                                        'Resolve',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'PublicSans',
+                                                          fontSize: 14.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: tcWhite,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
                                             : Container(),
                                   ],
                                 ),

@@ -66,4 +66,30 @@ class BarangayService {
       throw Exception('Failed to load barangay');
     }
   }
+
+  Future<bool> patchBarangay(BarangayModel barangayModel, int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    try {
+      final response = await http.patch(
+        Uri.parse('$baseUrl${ApiConstants.barangayEndpoint}/${id}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json'
+        },
+        body: json.encode(barangayModel.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('${response.statusCode}: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      throw Exception('Failed to update barangay: $e');
+    }
+  }
 }

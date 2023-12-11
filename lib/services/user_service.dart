@@ -295,7 +295,7 @@ class UserService {
 
     try {
       final response = await http.patch(
-        Uri.parse('$baseUrl${ApiConstants.userEndpoint}/${userId}'),
+        Uri.parse('$baseUrl${ApiConstants.userEndpoint}/$userId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
