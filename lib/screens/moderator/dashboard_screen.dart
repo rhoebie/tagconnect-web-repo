@@ -200,37 +200,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Dashboard',
-                  style: TextStyle(
-                    color: tcBlack,
-                    fontFamily: 'Roboto',
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Dashboard',
+                style: TextStyle(
+                  color: tcBlack,
+                  fontFamily: 'Roboto',
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.w700,
                 ),
-                InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: 50.w,
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                      color: tcWhite,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      Icons.notifications_rounded,
-                      color: tcBlack,
-                      size: 30.r,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
             Divider(
               color: Colors.transparent,

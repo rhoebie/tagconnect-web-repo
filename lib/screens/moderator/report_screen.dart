@@ -1061,6 +1061,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         null) {
                                                       processReport(
                                                           reportModel!.id!);
+
+                                                      reportModel = null;
                                                     }
                                                   },
                                                   style:

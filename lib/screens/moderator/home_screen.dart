@@ -2,15 +2,19 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:tagconnectweb/animations/fade_animation.dart';
+import 'package:tagconnectweb/configs/network_config.dart';
 import 'package:tagconnectweb/constant/color_constant.dart';
 import 'package:tagconnectweb/constant/provider_constant.dart';
 import 'package:tagconnectweb/models/barangay_model.dart';
 import 'package:tagconnectweb/screens/moderator/account_screen.dart';
 import 'package:tagconnectweb/screens/moderator/barangay_screen.dart';
 import 'package:tagconnectweb/screens/moderator/dashboard_screen.dart';
+import 'package:tagconnectweb/screens/moderator/login_screen.dart';
 import 'package:tagconnectweb/screens/moderator/report_screen.dart';
 import 'package:tagconnectweb/screens/moderator/user_screen.dart';
 import 'package:tagconnectweb/services/barangay_service.dart';
+import 'package:tagconnectweb/services/user_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,6 +69,47 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     });
+  }
+
+  Future<void> logoutuser() async {
+    bool isConnnected = await NetworkConfig.isConnected();
+    try {
+      if (isConnnected) {
+        final userService = UserService();
+        final bool response = await userService.logout();
+
+        if (response) {
+          Navigator.of(context).pushReplacement(
+            FadeAnimation(LoginScreen()),
+          );
+          print('Logout successful.');
+        } else {
+          print('Logout failed.');
+        }
+      } else {
+        if (mounted) {
+          setState(
+            () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('No Internet'),
+                  content: const Text('You dont have internet.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => {Navigator.pop(context, 'OK')},
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -155,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Text(
-                            'Moderator',
+                            'Admin',
                             style: TextStyle(
                               color: tcBlack,
                               fontFamily: 'PublicSans',
@@ -330,6 +375,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       title: Text(
                         'Moderator',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontFamily: 'PublicSans',
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          color: _currentIndex != 4 ? tcBlack : tcViolet,
+                        ),
+                      ),
+                      titleAlignment: ListTileTitleAlignment.center,
+                    ),
+                    ListTile(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                        ),
+                      ),
+                      tileColor: _currentIndex != 4 ? tcWhite : tcAsh,
+                      onTap: () {
+                        logoutuser();
+                      },
+                      leading: Icon(
+                        Icons.logout_rounded,
+                        color: _currentIndex != 4 ? tcBlack : tcViolet,
+                        size: 30.r,
+                      ),
+                      title: Text(
+                        'Logout',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontFamily: 'PublicSans',
