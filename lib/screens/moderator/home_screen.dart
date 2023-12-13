@@ -454,30 +454,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Dark Mode',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            color: tcBlack,
-                          ),
-                        ),
-                        Transform.scale(
-                          scale: 1.r,
-                          child: Switch(
-                            value: themeNotifier.isDarkMode,
-                            onChanged: (value) {
-                              themeNotifier.toggleTheme();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
