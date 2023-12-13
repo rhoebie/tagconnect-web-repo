@@ -129,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
     final autoLoginNotifier = Provider.of<AutoLoginNotifier>(context);
     return Scaffold(
       backgroundColor: tcWhite,

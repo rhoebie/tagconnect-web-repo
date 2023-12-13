@@ -41,7 +41,7 @@ class _AccountScreenState extends State<AccountScreen> {
   XFile? _image;
   ButtonState stateOnlyText = ButtonState.idle;
   ButtonState stateTextWithIcon = ButtonState.idle;
-  late UserModel userModel;
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -212,9 +212,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                       height: 100,
                                       fit: BoxFit.cover,
                                     )
-                                  : userModel.image != null
+                                  : userModel?.image != null
                                       ? Image.network(
-                                          userModel.image!,
+                                          userModel!.image!,
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.cover,
