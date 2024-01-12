@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:tagconnectweb/constant/provider_constant.dart';
 import 'package:tagconnectweb/firebase_options.dart';
+import 'package:tagconnectweb/screens/moderator/home_screen.dart';
 import 'package:tagconnectweb/screens/moderator/splash_screen.dart';
 import 'package:tagconnectweb/services/firebase_service.dart';
 
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'System',
-          home: SplashScreen(),
+          home: HomeScreen(),
         );
       },
     );
